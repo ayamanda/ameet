@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -41,6 +42,7 @@ export default function RootLayout({
         <body className={`${inter.className} bg-dark-2`}>
           <Toaster />
           {children}
+          <Analytics />
         </body>
       </ClerkProvider>
     </html>

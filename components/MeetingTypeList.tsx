@@ -81,7 +81,7 @@ const MeetingTypeList = () => {
         img="/icons/join-meeting.svg"
         title="Join Meeting"
         description="via invitation link"
-        className="bg-blue-1"
+        className="bg-green-1"
         handleClick={() => setMeetingState('isJoiningMeeting')}
       />
       <HomeCard
