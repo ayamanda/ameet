@@ -1,4 +1,3 @@
-export const runtime = 'edge';
 import CallList from "@/components/CallList";
 
 const PreviousPage = () => {

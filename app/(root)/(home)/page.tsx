@@ -1,4 +1,4 @@
-export const runtime = 'edge';
+
 import MeetingTypeList from '@/components/MeetingTypeList';
 
 const Home = () => {
