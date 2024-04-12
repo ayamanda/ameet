@@ -1,5 +1,5 @@
 "use client";
-
+export const runtime = 'edge';
 import { useUser } from "@clerk/nextjs";
 import { useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useRouter } from "next/navigation";
