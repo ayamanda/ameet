@@ -1,5 +1,5 @@
 'use client';
-export const runtime = 'edge';
+
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
