@@ -66,8 +66,8 @@ Make sure you have the following installed on your machine:
 **Cloning the Repository**
 
 ```bash
-git clone https://github.com/adrianhajdin/zoom-clone.git
-cd zoom-clone
+https://github.com/ayamanda/ameet.git
+cd ameet
 ```
 
 **Installation**
