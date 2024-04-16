@@ -30,8 +30,7 @@ const MeetingRoom = () => {
   const router = useRouter();
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
   const [showParticipants, setShowParticipants] = useState(false);
-  const [showShareOptions, setShowShareOptions] = useState(false);
-  const [showMoreOptions, setShowMoreOptions] = useState(false);
+
   const [linkCopied, setLinkCopied] = useState(false);
   const shareCardRef = useRef<HTMLDivElement>(null);
 
@@ -61,19 +60,6 @@ const MeetingRoom = () => {
     window.location.href = emailUrl;
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (shareCardRef.current && !shareCardRef.current.contains(event.target as Node)) {
-        setShowShareOptions(false);
-        setShowMoreOptions(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [shareCardRef]);
 
   if (callingState !== CallingState.JOINED) return <Loader />;
 
