@@ -7,9 +7,10 @@ import {
   PaginatedGridLayout,
   SpeakerLayout,
   useCallStateHooks,
+  useCall,
 } from '@stream-io/video-react-sdk';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Users, LayoutList, Copy, Share, Mail, MoreVertical } from 'lucide-react';
+import { Users, LayoutList, Copy, Share, Mail, MoreVertical, PhoneOff } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +32,7 @@ const MeetingRoom = () => {
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
   const [showParticipants, setShowParticipants] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const shareCardRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +40,8 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
+
+  const call = useCall();
 
   const copyLinkToClipboard = () => {
     navigator.clipboard.writeText(meetingLink)
@@ -64,6 +68,7 @@ const MeetingRoom = () => {
     const handleClickOutside = (event: MouseEvent) => {
       if (shareCardRef.current && !shareCardRef.current.contains(event.target as Node)) {
         setShowShareOptions(false);
+        setShowMoreOptions(false);
       }
     };
 
@@ -86,6 +91,8 @@ const MeetingRoom = () => {
     }
   };
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <section className="relative h-screen w-full overflow-hidden pt-4 text-white">
       <div className="relative flex size-full items-center justify-center">
@@ -103,84 +110,123 @@ const MeetingRoom = () => {
 
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-5 pb-4">
         <CallControls onLeave={() => router.push(`/`)} />
-
-        <DropdownMenu>
-          <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]">
-            <LayoutList size={20} className="text-white" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
-            {['Grid', 'Speaker-Left', 'Speaker-Right'].map((item, index) => (
-              <div key={index}>
-                <DropdownMenuItem onClick={() => setLayout(item.toLowerCase() as CallLayoutType)}>
-                  {item}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="border-dark-1" />
-              </div>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <CallStatsButton />
-
-        <button
-          onClick={() => setShowParticipants((prev) => !prev)}
-          className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]"
-        >
-          <Users size={20} className="text-white" />
-        </button>
-
-
-        <div className="relative">
-          <button
-            onClick={() => setShowShareOptions((prev) => !prev)}
-            className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]"
-          >
-            <Share size={20} className="text-white" />
-          </button>
-          {showShareOptions && (
-            <div ref={shareCardRef} className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-              <Card className="bg-[#19232d] p-4 w-80">
-                <CardHeader className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium text-white">Share Meeting</h3>
-                  <button
-                    onClick={() => setShowShareOptions(false)}
-                    className="cursor-pointer hover:text-gray-300"
-                  >
-                    <MoreVertical size={20} />
-                  </button>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Copy size={20} className="text-white" />
-                      <button
-                        onClick={copyLinkToClipboard}
-                        className="cursor-pointer text-white hover:text-gray-300"
-                      >
-                        {linkCopied ? 'Link Copied!' : 'Copy Meeting Link'}
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <img
-                        src="/icons/whatsapp.svg"
-                        alt="WhatsApp"
-                        className="h-6 w-6 cursor-pointer"
-                        onClick={openWhatsApp}
-                      />
-                      <Mail size={20} className="text-white cursor-pointer" onClick={openEmail} />
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="text-white">
-                  Share the meeting link with your team or colleagues.
-                </CardFooter>
-              </Card>
-            </div>
-          )}
-        </div>
-
-
         {!isPersonalRoom && <EndCallButton />}
+
+        {!isMobile && (
+          <>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]">
+                <LayoutList size={20} className="text-white" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
+                {['Grid', 'Speaker-Left', 'Speaker-Right'].map((item, index) => (
+                  <div key={index}>
+                    <DropdownMenuItem onClick={() => setLayout(item.toLowerCase() as CallLayoutType)}>
+                      {item}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="border-dark-1" />
+                  </div>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <CallStatsButton />
+
+            <button
+              onClick={() => setShowParticipants((prev) => !prev)}
+              className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]"
+            >
+              <Users size={20} className="text-white" />
+            </button>
+
+            <div className="relative">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]">
+                  <Share size={20} className="text-white" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
+                  <DropdownMenuItem onClick={copyLinkToClipboard}>
+                    <div className="flex items-center gap-2">
+                      <Copy size={16} className="text-white" />
+                      {linkCopied ? 'Link Copied!' : 'Copy Meeting Link'}
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="border-dark-1" />
+                  <DropdownMenuItem onClick={openWhatsApp}>
+                    <div className="flex items-center gap-2">
+                      <img src="/icons/whatsapp.svg" alt="WhatsApp" className="h-4 w-4" />
+                      Share on WhatsApp
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={openEmail}>
+                    <div className="flex items-center gap-2">
+                      <Mail size={16} className="text-white" />
+                      Share via Email
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </>
+        )}
+
+        {isMobile && (
+          <div className="fixed top-5 left-5 right-5 flex items-center justify-center gap-5 bg-\[#19232d\]/50 backdrop-blur-md rounded-lg p-2 shadow-lg">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]">
+                <LayoutList size={20} className="text-white" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
+                {['Grid', 'Speaker-Left', 'Speaker-Right'].map((item, index) => (
+                  <div key={index}>
+                    <DropdownMenuItem onClick={() => setLayout(item.toLowerCase() as CallLayoutType)}>
+                      {item}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="border-dark-1" />
+                  </div>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <CallStatsButton />
+
+            <button
+              onClick={() => setShowParticipants((prev) => !prev)}
+              className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]"
+            >
+              <Users size={20} className="text-white" />
+            </button>
+
+           <div className="relative">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]">
+                  <Share size={20} className="text-white" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
+                  <DropdownMenuItem onClick={copyLinkToClipboard}>
+                    <div className="flex items-center gap-2">
+                      <Copy size={16} className="text-white" />
+                      {linkCopied ? 'Link Copied!' : 'Copy Meeting Link'}
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="border-dark-1" />
+                  <DropdownMenuItem onClick={openWhatsApp}>
+                    <div className="flex items-center gap-2">
+                      <img src="/icons/whatsapp.svg" alt="WhatsApp" className="h-4 w-4" />
+                      Share on WhatsApp
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={openEmail}>
+                    <div className="flex items-center gap-2">
+                      <Mail size={16} className="text-white" />
+                      Share via Email
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

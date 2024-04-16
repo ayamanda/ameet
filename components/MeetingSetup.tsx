@@ -6,6 +6,7 @@ import {
   useCall,
   useCallStateHooks,
 } from '@stream-io/video-react-sdk';
+import { Camera, CameraOff, MicOff, Mic } from 'lucide-react';
 
 import Alert from './Alert';
 import { Button } from './ui/button';
@@ -30,17 +31,24 @@ const MeetingSetup = ({
     );
   }
 
-  const [isMicCamToggled, setIsMicCamToggled] = useState(false);
+  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+  const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(true);
 
   useEffect(() => {
-    if (isMicCamToggled) {
-      call.camera.disable();
-      call.microphone.disable();
-    } else {
+    if (isCameraEnabled) {
       call.camera.enable();
-      call.microphone.enable();
+    } else {
+      call.camera.disable();
     }
-  }, [isMicCamToggled, call.camera, call.microphone]);
+  }, [isCameraEnabled, call.camera]);
+
+  useEffect(() => {
+    if (isMicrophoneEnabled) {
+      call.microphone.enable();
+    } else {
+      call.microphone.disable();
+    }
+  }, [isMicrophoneEnabled, call.microphone]);
 
   if (callTimeNotArrived)
     return (
@@ -62,15 +70,33 @@ const MeetingSetup = ({
       <div className="flex h-screen w-full flex-col items-center justify-center gap-3 text-white">
         <h1 className="text-center text-2xl font-bold">Setup</h1>
         <VideoPreview />
-        <div className="flex h-16 items-center justify-center gap-3">
-          <label className="flex items-center justify-center gap-2 font-medium">
-            <input
-              type="checkbox"
-              checked={isMicCamToggled}
-              onChange={(e) => setIsMicCamToggled(e.target.checked)}
-            />
-            Join with mic and camera off
-          </label>
+        <div className="flex items-center justify-center gap-3">
+          <Button
+            variant={isCameraEnabled ? 'ghost' : 'danger'}
+            onClick={() => setIsCameraEnabled(!isCameraEnabled)}
+            className={`${
+              isCameraEnabled ? 'bg-transparent' : 'bg-red-500'
+            } rounded-full p-2`}
+          >
+            {isCameraEnabled ? (
+              <Camera className="text-green-500 h-6 w-6" />
+            ) : (
+              <CameraOff className="text-white h-6 w-6" />
+            )}
+          </Button>
+          <Button
+            variant={isMicrophoneEnabled ? 'ghost' : 'danger'}
+            onClick={() => setIsMicrophoneEnabled(!isMicrophoneEnabled)}
+            className={`${
+              isMicrophoneEnabled ? 'bg-transparent' : 'bg-red-500'
+            } rounded-full p-2`}
+          >
+            {isMicrophoneEnabled ? (
+              <Mic className="text-green-500 h-6 w-6" />
+            ) : (
+              <MicOff className="text-white h-6 w-6" />
+            )}
+          </Button>
           <DeviceSettings />
         </div>
         <Button
