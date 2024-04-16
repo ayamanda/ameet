@@ -72,7 +72,7 @@ const PersonalRoom = () => {
           onClick={() => {
             navigator.clipboard.writeText(meetingLink);
             toast({
-              title: "Link Copied",
+              title: " Link Copied ",
             });
           }}
         >

@@ -20,6 +20,7 @@ import {
 import Loader from './Loader';
 import EndCallButton from './EndCallButton';
 import { cn } from '@/lib/utils';
+import QRCode from 'react-qr-code';
 
 type CallLayoutType = 'grid' | 'speaker-left' | 'speaker-right';
 
@@ -36,6 +37,8 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
+
+
 
   const copyLinkToClipboard = () => {
     navigator.clipboard.writeText(meetingLink)
@@ -91,7 +94,7 @@ const MeetingRoom = () => {
 
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-5 pb-4">
         <CallControls onLeave={() => router.push(`/`)} />
-        {!isPersonalRoom && <EndCallButton />}
+        
 
         {!isMobile && (
           <>
@@ -133,6 +136,12 @@ const MeetingRoom = () => {
                     </div>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="border-dark-1" />
+                  <DropdownMenuItem className="flex items-center justify-between">
+                    <div className="bg-dark-2 p-2 rounded">
+                      <QRCode value={meetingLink} size={100} />
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="border-dark-1" />
                   <DropdownMenuItem onClick={openWhatsApp}>
                     <div className="flex items-center gap-2">
                       <img src="/icons/whatsapp.svg" alt="WhatsApp" className="h-4 w-4" />
@@ -148,11 +157,13 @@ const MeetingRoom = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
+            {!isPersonalRoom && <EndCallButton />}
           </>
         )}
 
         {isMobile && (
           <div className="fixed top-5 left-5 right-5 flex items-center justify-center gap-5 bg-\[#19232d\]/50 backdrop-blur-md rounded-lg p-2 shadow-lg">
+            
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]">
                 <LayoutList size={20} className="text-white" />
@@ -183,29 +194,36 @@ const MeetingRoom = () => {
                 <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]">
                   <Share size={20} className="text-white" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
-                  <DropdownMenuItem onClick={copyLinkToClipboard}>
-                    <div className="flex items-center gap-2">
-                      <Copy size={16} className="text-white" />
-                      {linkCopied ? 'Link Copied!' : 'Copy Meeting Link'}
-                    </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator className="border-dark-1" />
-                  <DropdownMenuItem onClick={openWhatsApp}>
-                    <div className="flex items-center gap-2">
-                      <img src="/icons/whatsapp.svg" alt="WhatsApp" className="h-4 w-4" />
-                      Share on WhatsApp
-                    </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={openEmail}>
-                    <div className="flex items-center gap-2">
-                      <Mail size={16} className="text-white" />
-                      Share via Email
-                    </div>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
+                  <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
+                    <DropdownMenuItem onClick={copyLinkToClipboard}>
+                      <div className="flex items-center gap-2">
+                        <Copy size={16} className="text-white" />
+                        {linkCopied ? 'Link Copied!' : 'Copy Meeting Link'}
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="border-dark-1" />
+                    <DropdownMenuItem className="flex items-center justify-between">
+                      <div className="bg-dark-2 p-2 rounded">
+                        <QRCode value={meetingLink} size={100} />
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="border-dark-1" />
+                    <DropdownMenuItem onClick={openWhatsApp}>
+                      <div className="flex items-center gap-2">
+                        <img src="/icons/whatsapp.svg" alt="WhatsApp" className="h-4 w-4" />
+                        Share on WhatsApp
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={openEmail}>
+                      <div className="flex items-center gap-2">
+                        <Mail size={16} className="text-white" />
+                        Share via Email
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
               </DropdownMenu>
             </div>
+            {!isPersonalRoom && <EndCallButton />}
           </div>
         )}
       </div>

@@ -1,4 +1,6 @@
 'use client';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
   DeviceSettings,
@@ -6,14 +8,12 @@ import {
   useCall,
   useCallStateHooks,
 } from '@stream-io/video-react-sdk';
-import { Camera, CameraOff, MicOff, Mic } from 'lucide-react';
+import { Camera, CameraOff, Mic, MicOff } from 'lucide-react';
 
 import Alert from './Alert';
 import { Button } from './ui/button';
 
-const MeetingSetup = ({
-  setIsSetupComplete,
-}: {
+const MeetingSetup = ({ setIsSetupComplete }: {
   setIsSetupComplete: (value: boolean) => void;
 }) => {
   const { useCallEndedAt, useCallStartsAt } = useCallStateHooks();
@@ -27,28 +27,37 @@ const MeetingSetup = ({
 
   if (!call) {
     throw new Error(
-      'useStreamCall must be used within a StreamCall component.',
+      'useStreamCall must be used within a StreamCall component.'
     );
   }
 
-  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
-  const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(true);
+  const [isCameraOn, setIsCameraOn] = useState(false);
+  const [isMicOn, setIsMicOn] = useState(false);
 
   useEffect(() => {
-    if (isCameraEnabled) {
-      call.camera.enable();
-    } else {
+    call.camera.disable();
+    call.microphone.disable();
+  }, [call.camera, call.microphone]);
+
+  const toggleCamera = () => {
+    if (isCameraOn) {
       call.camera.disable();
-    }
-  }, [isCameraEnabled, call.camera]);
-
-  useEffect(() => {
-    if (isMicrophoneEnabled) {
-      call.microphone.enable();
+      setIsCameraOn(false);
     } else {
-      call.microphone.disable();
+      call.camera.enable();
+      setIsCameraOn(true);
     }
-  }, [isMicrophoneEnabled, call.microphone]);
+  };
+
+  const toggleMic = () => {
+    if (isMicOn) {
+      call.microphone.disable();
+      setIsMicOn(false);
+    } else {
+      call.microphone.enable();
+      setIsMicOn(true);
+    }
+  };
 
   if (callTimeNotArrived)
     return (
@@ -67,38 +76,41 @@ const MeetingSetup = ({
 
   return (
     <div className="relative h-screen w-full">
-      <div className="flex h-screen w-full flex-col items-center justify-center gap-3 text-white">
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-5 text-white">
+        <div className="absolute top-4 left-4">
+          <Link href="/" className="flex items-center gap-1">
+            <Image
+              src="/icons/logo.svg"
+              width={32}
+              height={32}
+              alt="Ameet logo"
+              className="max-sm:size-10"
+            />
+            <p className="text-[26px] font-extrabold text-white max-sm:hidden">
+              Ameet
+            </p>
+          </Link>
+        </div>
         <h1 className="text-center text-2xl font-bold">Setup</h1>
-        <VideoPreview />
-        <div className="flex items-center justify-center gap-3">
-          <Button
-            variant="ghost"
-            onClick={() => setIsCameraEnabled(!isCameraEnabled)}
+        <VideoPreview className='text-white max-h-[300px]' />
+        <div className="flex h-16 items-center justify-center gap-3">
+          <button
+            onClick={toggleCamera}
+            className={`p-2 rounded-md ${isCameraOn ? 'bg-[#19232d] px-4 py-2 hover:bg-[#4c535b] text-white' : 'bg-red-500 px-4 py-2 hover:bg-red-400 text-white'}`}
           >
-            {isCameraEnabled ? (
-              <Camera className="text-green-500 h-5 w-5" />
-            ) : (
-              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500">
-                <CameraOff className="text-white h-4 w-4" />
-              </div>
-            )}
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={() => setIsMicrophoneEnabled(!isMicrophoneEnabled)}
+            {isCameraOn ? <Camera /> : <CameraOff />}
+          </button>
+          <button
+            onClick={toggleMic}
+            className={`p-2 rounded-md ${isMicOn ? 'bg-[#19232d] px-4 py-2 hover:bg-[#4c535b] text-white' : 'bg-red-500 px-4 py-2 hover:bg-red-400 text-white'}`}
           >
-            {isMicrophoneEnabled ? (
-              <Mic className="text-green-500 h-5 w-5" />
-            ) : (
-              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500">
-                <MicOff className="text-white h-4 w-4" />
-              </div>
-            )}
-          </Button>
+            {isMicOn ? <Mic /> : <MicOff />}
+          </button>
           <DeviceSettings />
         </div>
+
         <Button
-          className="rounded-md bg-green-500 px-4 py-2.5"
+          className="rounded-xl bg-blue-600 px-6 py-3 hover:bg-blue-500 shadow-md"
           onClick={() => {
             call.join();
             setIsSetupComplete(true);

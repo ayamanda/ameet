@@ -54,6 +54,25 @@
 }
 
 /* ==== clerk class override ===== */
+.cl-providerIcon__apple{
+  filter: invert(1);
+}
+
+.cl-internal-1nn89fl{
+  color: #fff;
+}
+
+.cl-internal-4b57d1 {
+  color: #fff;
+}
+
+.cl-internal-1lr0jgz{
+  color: #1c1f2e;
+}
+
+.cl-internal-1n6yo8n{
+  color:#fff
+}
 
 .cl-userButtonPopoverActionButtonIcon {
   color: white;
