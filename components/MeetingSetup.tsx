@@ -72,29 +72,27 @@ const MeetingSetup = ({
         <VideoPreview />
         <div className="flex items-center justify-center gap-3">
           <Button
-            variant={isCameraEnabled ? 'ghost' : 'danger'}
+            variant="ghost"
             onClick={() => setIsCameraEnabled(!isCameraEnabled)}
-            className={`${
-              isCameraEnabled ? 'bg-transparent' : 'bg-red-500'
-            } rounded-full p-2`}
           >
             {isCameraEnabled ? (
-              <Camera className="text-green-500 h-6 w-6" />
+              <Camera className="text-green-500 h-5 w-5" />
             ) : (
-              <CameraOff className="text-white h-6 w-6" />
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500">
+                <CameraOff className="text-white h-4 w-4" />
+              </div>
             )}
           </Button>
           <Button
-            variant={isMicrophoneEnabled ? 'ghost' : 'danger'}
+            variant="ghost"
             onClick={() => setIsMicrophoneEnabled(!isMicrophoneEnabled)}
-            className={`${
-              isMicrophoneEnabled ? 'bg-transparent' : 'bg-red-500'
-            } rounded-full p-2`}
           >
             {isMicrophoneEnabled ? (
-              <Mic className="text-green-500 h-6 w-6" />
+              <Mic className="text-green-500 h-5 w-5" />
             ) : (
-              <MicOff className="text-white h-6 w-6" />
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500">
+                <MicOff className="text-white h-4 w-4" />
+              </div>
             )}
           </Button>
           <DeviceSettings />
