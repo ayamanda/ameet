@@ -114,6 +114,7 @@ const MeetingRoom = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
+
             <CallStatsButton />
 
             <button
@@ -128,8 +129,8 @@ const MeetingRoom = () => {
                 <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]">
                   <Share size={20} className="text-white" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
-                  <DropdownMenuItem onClick={copyLinkToClipboard}>
+                <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white ">
+                  <DropdownMenuItem onClick={copyLinkToClipboard} >
                     <div className="flex items-center gap-2">
                       <Copy size={16} className="text-white" />
                       {linkCopied ? 'Link Copied!' : 'Copy Meeting Link'}
@@ -137,7 +138,7 @@ const MeetingRoom = () => {
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="border-dark-1" />
                   <DropdownMenuItem className="flex items-center justify-between">
-                    <div className="bg-dark-2 p-2 rounded">
+                    <div className="bg-white p-2 rounded justify-center">
                       <QRCode value={meetingLink} size={100} />
                     </div>
                   </DropdownMenuItem>
@@ -203,7 +204,7 @@ const MeetingRoom = () => {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="border-dark-1" />
                     <DropdownMenuItem className="flex items-center justify-between">
-                      <div className="bg-dark-2 p-2 rounded">
+                      <div className="bg-white p-2 rounded justify-center">
                         <QRCode value={meetingLink} size={100} />
                       </div>
                     </DropdownMenuItem>
