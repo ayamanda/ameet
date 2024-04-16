@@ -10,7 +10,7 @@ import {
   useCall,
 } from '@stream-io/video-react-sdk';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Users, LayoutList, Copy, Share, Mail, MoreVertical, PhoneOff } from 'lucide-react';
+import { Users, LayoutList, Copy, Share, Mail } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +18,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import Loader from './Loader';
 import EndCallButton from './EndCallButton';
 import { cn } from '@/lib/utils';
@@ -40,8 +39,6 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
-
-  const call = useCall();
 
   const copyLinkToClipboard = () => {
     navigator.clipboard.writeText(meetingLink)
