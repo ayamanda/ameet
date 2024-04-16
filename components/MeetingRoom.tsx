@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import {
   CallControls,
   CallParticipantsList,
@@ -7,7 +7,6 @@ import {
   PaginatedGridLayout,
   SpeakerLayout,
   useCallStateHooks,
-  useCall,
 } from '@stream-io/video-react-sdk';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Users, LayoutList, Copy, Share, Mail } from 'lucide-react';
@@ -32,7 +31,6 @@ const MeetingRoom = () => {
   const [showParticipants, setShowParticipants] = useState(false);
 
   const [linkCopied, setLinkCopied] = useState(false);
-  const shareCardRef = useRef<HTMLDivElement>(null);
 
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
