@@ -1,9 +1,15 @@
 'use client';
 
-import { useCall, useCallStateHooks } from '@stream-io/video-react-sdk';
-import { PhoneOff } from 'lucide-react';
-import { Button } from './ui/button';
+import { CancelCallButton, useCall, useCallStateHooks } from '@stream-io/video-react-sdk';
+import { PhoneOff, ArrowRightFromLine } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 const EndCallButton = () => {
   const call = useCall();
@@ -11,32 +17,51 @@ const EndCallButton = () => {
 
   if (!call)
     throw new Error(
-      'useStreamCall must be used within a StreamCall component.',
+      'useStreamCall must be used within a StreamCall component.'
     );
 
-  // https://getstream.io/video/docs/react/guides/call-and-participant-state/#participant-state-3
   const { useLocalParticipant } = useCallStateHooks();
   const localParticipant = useLocalParticipant();
+
+  const endCall = async () => {
+    await call.endCall();
+    setTimeout(() => {
+      window.location.reload();
+      router.push('/');
+    }, 1000);
+  };
+  const leaveCall = async () => {
+    await call.leave();
+    router.push('/');
+  };
 
   const isMeetingOwner =
     localParticipant &&
     call.state.createdBy &&
     localParticipant.userId === call.state.createdBy.id;
 
-  if (!isMeetingOwner) return null;
-
-const endCall = async () => {
-  await call.endCall();
-  setTimeout(() => {
-    window.location.reload();
-    router.push('/');
-  }, 1000);
-};
+  if (!isMeetingOwner) return <CancelCallButton onLeave={() => router.push(`/`)} />;
 
   return (
-    <Button onClick={endCall} className="cursor-pointer rounded-2xl px-4 py-2 hover:bg-red-400 bg-red-500">
-     <PhoneOff/>
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger className="cursor-pointer rounded-2xl px-4 py-2 bg-red-500 hover:bg-red-400  transition-colors duration-300">
+        <PhoneOff size={20} className="text-white " />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
+        <DropdownMenuItem onClick={leaveCall} className="flex items-center justify-between hover:bg-white hover:text-red-500 transition-colors duration-300">
+          <div className="flex items-center gap-2 ">
+            <ArrowRightFromLine  size={20}/> leave call
+            
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="border-dark-1" />
+        <DropdownMenuItem onClick={endCall} className="flex items-center justify-between hover:bg-white hover:text-red-500 transition-colors duration-300">
+          <div className="cursor-pointer rounded-2xl px-4 py-2 bg-red-500">
+            End Call for All
+          </div>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

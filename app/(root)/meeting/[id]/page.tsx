@@ -34,16 +34,11 @@ const MeetingPage = () => {
     <main className="h-screen w-full">
       <StreamCall call={call}>
         <StreamTheme>
-        <BackgroundFiltersProvider
-          isBlurringEnabled={false} // enables blurring
-          backgroundFilter="blur" // initial filter
-        >
         {!isSetupComplete ? (
           <MeetingSetup setIsSetupComplete={setIsSetupComplete} />
         ) : (
           <MeetingRoom />
         )}
-        </BackgroundFiltersProvider>
         </StreamTheme>
       </StreamCall>
     </main>

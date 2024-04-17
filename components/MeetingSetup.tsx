@@ -1,7 +1,8 @@
 'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   DefaultVideoPlaceholder,
   DeviceSettings,
@@ -16,33 +17,32 @@ import { Camera, CameraOff, Mic, MicOff } from 'lucide-react';
 import Alert from './Alert';
 import { Button } from './ui/button';
 import { AudioVolumeIndicator } from './AudioVolumeIndicator';
-import { BackgroundFilters } from './BackgroundFilter';
+import { ParticipantsPreview } from './Participants';
 
-const MeetingSetup = ({ setIsSetupComplete }: {
-  setIsSetupComplete: (value: boolean) => void;
-}) => {
+const MeetingSetup = ({ setIsSetupComplete }: { setIsSetupComplete: (value: boolean) => void }) => {
   const { useCallEndedAt, useCallStartsAt } = useCallStateHooks();
   const callStartsAt = useCallStartsAt();
   const callEndedAt = useCallEndedAt();
-  const callTimeNotArrived =
-    callStartsAt && new Date(callStartsAt) > new Date();
+  const callTimeNotArrived = callStartsAt && new Date(callStartsAt) > new Date();
   const callHasEnded = !!callEndedAt;
 
   const call = useCall();
 
   if (!call) {
-    throw new Error(
-      'useStreamCall must be used within a StreamCall component.'
-    );
+    throw new Error('useStreamCall must be used within a StreamCall component.');
   }
 
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [isMicOn, setIsMicOn] = useState(false);
 
   useEffect(() => {
-    call.camera.disable();
-    call.microphone.disable();
-  }, [call.camera, call.microphone]);
+    if (!isCameraOn) {
+      call.camera.disable();
+    }
+    if (!isMicOn) {
+      call.microphone.disable();
+    }
+  }, [call.camera, call.microphone, isCameraOn, isMicOn]);
 
   const toggleCamera = () => {
     if (isCameraOn) {
@@ -65,17 +65,15 @@ const MeetingSetup = ({ setIsSetupComplete }: {
   };
 
   const DisabledVideoPreview = () => {
-  const connectedUser = useConnectedUser();
-  if (!connectedUser) return null;
+    const connectedUser = useConnectedUser();
+    if (!connectedUser) return null;
 
     return (
       <DefaultVideoPlaceholder
-        participant={
-          {
-            image: connectedUser.image,
-            name: connectedUser.name,
-          } as StreamVideoParticipant
-        }
+        participant={{
+          image: connectedUser.image,
+          name: connectedUser.name,
+        } as StreamVideoParticipant}
       />
     );
   };
@@ -95,6 +93,7 @@ const MeetingSetup = ({ setIsSetupComplete }: {
       />
     );
 
+
   return (
     <div className="relative h-screen w-full">
       <div className="flex h-screen w-full flex-col items-center justify-center gap-5 text-white">
@@ -107,34 +106,40 @@ const MeetingSetup = ({ setIsSetupComplete }: {
               alt="Ameet logo"
               className="max-sm:size-10"
             />
-            <p className="text-[26px] font-extrabold text-white max-sm:hidden">
-              Ameet
-            </p>
+            <p className="text-[26px] font-extrabold text-white max-sm:hidden">Ameet</p>
           </Link>
         </div>
         <h1 className="text-center text-2xl font-bold">Setup</h1>
-        <VideoPreview className='text-white max-h-[300px]' 
-          DisabledVideoPreview={DisabledVideoPreview}/>
-        <AudioVolumeIndicator/>
-        <div className="flex h-16 items-center justify-center gap-3">
-          <button
-            onClick={toggleCamera}
-            className={`p-2 rounded-md ${isCameraOn ? 'bg-[#19232d] px-4 py-2 hover:bg-[#4c535b] text-white' : 'bg-red-500 px-4 py-2 hover:bg-red-400 text-white'}`}
-          >
-            {isCameraOn ? <Camera /> : <CameraOff />}
-          </button>
-          <button
-            onClick={toggleMic}
-            className={`p-2 rounded-md ${isMicOn ? 'bg-[#19232d] px-4 py-2 hover:bg-[#4c535b] text-white' : 'bg-red-500 px-4 py-2 hover:bg-red-400 text-white'}`}
-          >
-            {isMicOn ? <Mic /> : <MicOff />}
-          </button>
-          <DeviceSettings />
-          <BackgroundFilters />
+        <VideoPreview className="text-white max-h-[300px] rounded-lg shadow-lg" DisabledVideoPreview={DisabledVideoPreview} />
+        <div className="flex items-center gap-8 rounded-lg bg-gray-800 p-4">
+          <AudioVolumeIndicator />
+          <div className="flex h-16 items-center justify-center gap-3">
+            <button
+              onClick={toggleCamera}
+              className={`flex items-center justify-center rounded-full p-2 text-white transition-colors ${
+                isCameraOn
+                  ? 'bg-blue-500 hover:bg-blue-600'
+                  : 'bg-red-500 hover:bg-red-600'
+              }`}
+            >
+              {isCameraOn ? <Camera size={20} /> : <CameraOff size={20} />}
+            </button>
+            <button
+              onClick={toggleMic}
+              className={`flex items-center justify-center rounded-full p-2 text-white transition-colors ${
+                isMicOn
+                  ? 'bg-blue-500 hover:bg-blue-600'
+                  : 'bg-red-500 hover:bg-red-600'
+              }`}
+            >
+              {isMicOn ? <Mic size={20} /> : <MicOff size={20} />}
+            </button>
+            <DeviceSettings />
+          </div>
+          <ParticipantsPreview />
         </div>
-
         <Button
-          className="rounded-xl bg-blue-600 px-6 py-3 hover:bg-blue-500 shadow-md"
+          className="rounded-lg bg-blue-500 px-6 py-3 text-white transition-colors hover:bg-blue-600 shadow-lg"
           onClick={() => {
             call.join();
             setIsSetupComplete(true);

@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import {
-  CallControls,
   CallParticipantsList,
   CallStatsButton,
   CallingState,
   PaginatedGridLayout,
+  RecordCallButton,
+  ScreenShareButton,
   SpeakerLayout,
+  SpeakingWhileMutedNotification,
+  ToggleAudioPublishingButton,
+  ToggleVideoPublishingButton,
   useCallStateHooks,
 } from '@stream-io/video-react-sdk';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -21,16 +25,13 @@ import Loader from './Loader';
 import EndCallButton from './EndCallButton';
 import { cn } from '@/lib/utils';
 import QRCode from 'react-qr-code';
-import { BackgroundFilters } from './BackgroundFilter';
 
 
 
-type CallLayoutType = 'grid' | 'speaker-left' | 'speaker-right';
+
+type CallLayoutType = 'grid'| 'speaker-up' | 'speaker-down' | 'speaker-left' | 'speaker-right'  ;
 
 const MeetingRoom = () => {
-  const searchParams = useSearchParams();
-  const isPersonalRoom = !!searchParams.get('personal');
-  const router = useRouter();
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
   const [showParticipants, setShowParticipants] = useState(false);
 
@@ -67,13 +68,25 @@ const MeetingRoom = () => {
   if (callingState !== CallingState.JOINED) return <Loader />;
 
   const CallLayout = () => {
+    const { useRemoteParticipants } = useCallStateHooks();
+    const otherParticipants = useRemoteParticipants();
+    const isOneOnOneCall = otherParticipants.length === 1;
+
     switch (layout) {
       case 'grid':
         return <PaginatedGridLayout />;
       case 'speaker-right':
         return <SpeakerLayout participantsBarPosition="left" />;
+      case 'speaker-up':
+        return <SpeakerLayout participantsBarPosition="bottom" />;
+      case 'speaker-down':
+        return <SpeakerLayout participantsBarPosition="top" />;
       default:
-        return <SpeakerLayout participantsBarPosition="right" />;
+        return isOneOnOneCall ? (
+          <SpeakerLayout participantsBarPosition="bottom" />
+        ) : (
+          <SpeakerLayout participantsBarPosition="top" />
+        );
     }
   };
 
@@ -95,8 +108,14 @@ const MeetingRoom = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-5 pb-4">
-        <CallControls onLeave={() => router.push(`/`)} />
+        {!isMobile &&(<ScreenShareButton />)}
         
+        <RecordCallButton/>
+        <SpeakingWhileMutedNotification>
+          <ToggleAudioPublishingButton />
+        </SpeakingWhileMutedNotification>
+        <ToggleVideoPublishingButton />
+        <EndCallButton/>
 
         
 
@@ -107,7 +126,7 @@ const MeetingRoom = () => {
                 <LayoutList size={20} className="text-white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
-                {['Grid', 'Speaker-Left', 'Speaker-Right'].map((item, index) => (
+                {['Grid', 'Speaker-Left', 'Speaker-Right', 'Speaker-Up','Speaker-Down'].map((item, index) => (
                   <div key={index}>
                     <DropdownMenuItem onClick={() => setLayout(item.toLowerCase() as CallLayoutType)}>
                       {item}
@@ -118,7 +137,6 @@ const MeetingRoom = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <BackgroundFilters />
             <CallStatsButton />
 
             <button
@@ -136,7 +154,7 @@ const MeetingRoom = () => {
                 <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white ">
                   <DropdownMenuItem onClick={copyLinkToClipboard} >
                     <div className="flex items-center gap-2">
-                      <Copy size={16} className="text-white" />
+                      <Copy size={16}  />
                       {linkCopied ? 'Link Copied!' : 'Copy Meeting Link'}
                     </div>
                   </DropdownMenuItem>
@@ -155,14 +173,13 @@ const MeetingRoom = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={openEmail}>
                     <div className="flex items-center gap-2">
-                      <Mail size={16} className="text-white" />
+                      <Mail size={16} />
                       Share via Email
                     </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            {!isPersonalRoom && <EndCallButton />}
           </>
         )}
 
@@ -174,7 +191,7 @@ const MeetingRoom = () => {
                 <LayoutList size={20} className="text-white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
-                {['Grid', 'Speaker-Left', 'Speaker-Right'].map((item, index) => (
+                {['Grid', 'Speaker-Left', 'Speaker-Right', 'Speaker-Up','Speaker-Down'].map((item, index) => (
                   <div key={index}>
                     <DropdownMenuItem onClick={() => setLayout(item.toLowerCase() as CallLayoutType)}>
                       {item}
@@ -185,7 +202,7 @@ const MeetingRoom = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <BackgroundFilters />
+
             <CallStatsButton />
 
             <button
@@ -203,7 +220,7 @@ const MeetingRoom = () => {
                   <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
                     <DropdownMenuItem onClick={copyLinkToClipboard}>
                       <div className="flex items-center gap-2">
-                        <Copy size={16} className="text-white" />
+                        <Copy size={16} />
                         {linkCopied ? 'Link Copied!' : 'Copy Meeting Link'}
                       </div>
                     </DropdownMenuItem>
@@ -222,14 +239,14 @@ const MeetingRoom = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={openEmail}>
                       <div className="flex items-center gap-2">
-                        <Mail size={16} className="text-white" />
+                        <Mail size={16}  />
                         Share via Email
                       </div>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            {!isPersonalRoom && <EndCallButton />}
+
           </div>
         )}
       </div>
