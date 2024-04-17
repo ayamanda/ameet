@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
-import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
+import { StreamCall, StreamTheme, BackgroundFiltersProvider, } from '@stream-io/video-react-sdk';
 import { useParams } from 'next/navigation';
 import { Loader } from 'lucide-react';
 
@@ -34,12 +34,16 @@ const MeetingPage = () => {
     <main className="h-screen w-full">
       <StreamCall call={call}>
         <StreamTheme>
-
+        <BackgroundFiltersProvider
+          isBlurringEnabled={false} // enables blurring
+          backgroundFilter="blur" // initial filter
+        >
         {!isSetupComplete ? (
           <MeetingSetup setIsSetupComplete={setIsSetupComplete} />
         ) : (
           <MeetingRoom />
         )}
+        </BackgroundFiltersProvider>
         </StreamTheme>
       </StreamCall>
     </main>

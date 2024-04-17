@@ -3,15 +3,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
+  DefaultVideoPlaceholder,
   DeviceSettings,
+  StreamVideoParticipant,
   VideoPreview,
   useCall,
   useCallStateHooks,
+  useConnectedUser,
 } from '@stream-io/video-react-sdk';
 import { Camera, CameraOff, Mic, MicOff } from 'lucide-react';
 
 import Alert from './Alert';
 import { Button } from './ui/button';
+import { AudioVolumeIndicator } from './AudioVolumeIndicator';
+import { BackgroundFilters } from './BackgroundFilter';
 
 const MeetingSetup = ({ setIsSetupComplete }: {
   setIsSetupComplete: (value: boolean) => void;
@@ -59,6 +64,22 @@ const MeetingSetup = ({ setIsSetupComplete }: {
     }
   };
 
+  const DisabledVideoPreview = () => {
+  const connectedUser = useConnectedUser();
+  if (!connectedUser) return null;
+
+    return (
+      <DefaultVideoPlaceholder
+        participant={
+          {
+            image: connectedUser.image,
+            name: connectedUser.name,
+          } as StreamVideoParticipant
+        }
+      />
+    );
+  };
+
   if (callTimeNotArrived)
     return (
       <Alert
@@ -92,7 +113,9 @@ const MeetingSetup = ({ setIsSetupComplete }: {
           </Link>
         </div>
         <h1 className="text-center text-2xl font-bold">Setup</h1>
-        <VideoPreview className='text-white max-h-[300px]' />
+        <VideoPreview className='text-white max-h-[300px]' 
+          DisabledVideoPreview={DisabledVideoPreview}/>
+        <AudioVolumeIndicator/>
         <div className="flex h-16 items-center justify-center gap-3">
           <button
             onClick={toggleCamera}
@@ -107,6 +130,7 @@ const MeetingSetup = ({ setIsSetupComplete }: {
             {isMicOn ? <Mic /> : <MicOff />}
           </button>
           <DeviceSettings />
+          <BackgroundFilters />
         </div>
 
         <Button

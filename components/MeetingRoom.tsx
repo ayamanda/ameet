@@ -21,6 +21,9 @@ import Loader from './Loader';
 import EndCallButton from './EndCallButton';
 import { cn } from '@/lib/utils';
 import QRCode from 'react-qr-code';
+import { BackgroundFilters } from './BackgroundFilter';
+
+
 
 type CallLayoutType = 'grid' | 'speaker-left' | 'speaker-right';
 
@@ -37,7 +40,6 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
-
 
 
   const copyLinkToClipboard = () => {
@@ -94,6 +96,8 @@ const MeetingRoom = () => {
 
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-5 pb-4">
         <CallControls onLeave={() => router.push(`/`)} />
+        <BackgroundFilters />
+
         
 
         {!isMobile && (
