@@ -5,6 +5,8 @@ import {
   CallingState,
   PaginatedGridLayout,
   RecordCallButton,
+  RecordCallConfirmationButton,
+  RecordingInProgressNotification,
   ScreenShareButton,
   SpeakerLayout,
   SpeakingWhileMutedNotification,
@@ -12,7 +14,6 @@ import {
   ToggleVideoPublishingButton,
   useCallStateHooks,
 } from '@stream-io/video-react-sdk';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { Users, LayoutList, Copy, Share, Mail } from 'lucide-react';
 import {
   DropdownMenu,
@@ -108,9 +109,11 @@ const MeetingRoom = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-5 pb-4">
+      
         {!isMobile &&(<ScreenShareButton />)}
-        
-        <RecordCallButton/>
+        <RecordingInProgressNotification>
+          <RecordCallConfirmationButton/>
+        </RecordingInProgressNotification>
         <SpeakingWhileMutedNotification>
           <ToggleAudioPublishingButton />
         </SpeakingWhileMutedNotification>

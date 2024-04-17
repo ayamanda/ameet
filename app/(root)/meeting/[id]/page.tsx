@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
-import { StreamCall, StreamTheme, BackgroundFiltersProvider, } from '@stream-io/video-react-sdk';
+import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
 import { useParams } from 'next/navigation';
 import { Loader } from 'lucide-react';
 
