@@ -1,5 +1,5 @@
 // BackgroundFilters.tsx
-import { useBackgroundFilters, useCall } from '@stream-io/video-react-sdk';
+import { useBackgroundFilters } from '@stream-io/video-react-sdk';
 
 import {
   DropdownMenu,
