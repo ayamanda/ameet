@@ -96,7 +96,7 @@ const MeetingRoom = () => {
 
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-5 pb-4">
         <CallControls onLeave={() => router.push(`/`)} />
-        <BackgroundFilters />
+        
 
         
 
@@ -118,7 +118,7 @@ const MeetingRoom = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-
+            <BackgroundFilters />
             <CallStatsButton />
 
             <button
@@ -184,7 +184,8 @@ const MeetingRoom = () => {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-
+            
+            <BackgroundFilters />
             <CallStatsButton />
 
             <button
