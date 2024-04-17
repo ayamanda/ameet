@@ -4,7 +4,6 @@ import {
   CallStatsButton,
   CallingState,
   PaginatedGridLayout,
-  RecordCallButton,
   RecordCallConfirmationButton,
   RecordingInProgressNotification,
   ScreenShareButton,
@@ -26,7 +25,7 @@ import Loader from './Loader';
 import EndCallButton from './EndCallButton';
 import { cn } from '@/lib/utils';
 import QRCode from 'react-qr-code';
-
+import { Helmet } from 'react-helmet';
 
 
 
@@ -42,6 +41,7 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
+  const logo = '/icons/logo.svg';
 
 
   const copyLinkToClipboard = () => {
@@ -95,6 +95,13 @@ const MeetingRoom = () => {
 
   return (
     <section className="relative h-screen w-full overflow-hidden pt-4 text-white">
+      <Helmet>
+        <meta property="og:url" content={meetingLink} />
+        <meta property="og:title" content="Join our meeting" />
+        <meta property="og:description" content="Come join us for an important meeting!" />
+        <meta property="og:image" content={logo} />
+        <meta property="og:site_name" content="Ameet" />
+      </Helmet>
       <div className="relative flex size-full items-center justify-center">
         <div className="flex size-full max-w-[1000px] items-center">
           <CallLayout />
