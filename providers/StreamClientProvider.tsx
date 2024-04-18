@@ -13,22 +13,36 @@ const StreamVideoProvider = ({ children }: { children: ReactNode }) => {
   const [videoClient, setVideoClient] = useState<StreamVideoClient>();
   const { user, isLoaded } = useUser();
 
-  useEffect(() => {
-    if (!isLoaded || !user) return;
-    if (!API_KEY) throw new Error('Stream API key is missing');
+useEffect(() => {
+  if (!API_KEY) throw new Error('Stream API key is missing');
 
-    const client = new StreamVideoClient({
-      apiKey: API_KEY,
-      user: {
-        id: user?.id,
-        name: user?.username || user?.id,
-        image: user?.imageUrl,
-      },
-      tokenProvider,
-    });
+  let userObj;
 
-    setVideoClient(client);
-  }, [user, isLoaded]);
+  if (isLoaded && user) {
+    // User is logged in with Clerk
+    userObj = {
+      id: user.id,
+      name: user?.username || user?.id,
+      image: user?.imageUrl || undefined, // Use undefined instead of null
+    };
+  } else {
+    // User is not logged in with Clerk
+    const tempUsername = `guest-${Math.random().toString(36).substring(2, 8)}`;
+    userObj = {
+      id: tempUsername,
+      name: tempUsername,
+      image: undefined, // Use undefined instead of null
+    };
+  }
+
+  const client = new StreamVideoClient({
+    apiKey: API_KEY,
+    user: userObj,
+    tokenProvider,
+  });
+
+  setVideoClient(client);
+}, [user, isLoaded]);
 
   if (!videoClient) return <Loader />;
 
