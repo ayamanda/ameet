@@ -41,7 +41,7 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
-  const logo = '/icons/logo.svg';
+  const logo = 'https://ipfsjgveqehtrwgtyowt.supabase.co/storage/v1/object/public/project-logos/1712987448632-logo.svg';
 
 
   const copyLinkToClipboard = () => {
