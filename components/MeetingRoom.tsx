@@ -3,7 +3,9 @@ import {
   CallParticipantsList,
   CallStatsButton,
   CallingState,
+  OwnCapability,
   PaginatedGridLayout,
+  PermissionRequests,
   RecordCallConfirmationButton,
   RecordingInProgressNotification,
   ScreenShareButton,
@@ -26,6 +28,7 @@ import EndCallButton from './EndCallButton';
 import { cn } from '@/lib/utils';
 import QRCode from 'react-qr-code';
 import { Helmet } from 'react-helmet';
+import PermissionRequestButton from './PermissionRequestButton';
 
 
 
@@ -113,6 +116,7 @@ const MeetingRoom = () => {
         >
           <CallParticipantsList onClose={() => setShowParticipants(false)} />
         </div>
+        <PermissionRequests />
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-5 pb-4">
@@ -126,7 +130,17 @@ const MeetingRoom = () => {
         </SpeakingWhileMutedNotification>
         <ToggleVideoPublishingButton />
         <EndCallButton/>
-
+        
+        {/* Permission request buttons */}
+        <PermissionRequestButton capability={OwnCapability.SEND_AUDIO}>
+          Request Audio Permission
+        </PermissionRequestButton>
+        <PermissionRequestButton capability={OwnCapability.SEND_VIDEO}>
+          Request Video Permission
+        </PermissionRequestButton>
+        <PermissionRequestButton capability={OwnCapability.SCREENSHARE}>
+          Request Screen Share Permission
+        </PermissionRequestButton>
         
 
         {!isMobile && (

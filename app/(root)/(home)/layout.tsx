@@ -7,7 +7,6 @@ import Sidebar from '@/components/Sidebar';
 export const metadata: Metadata = {
   title: 'Ameet',
   description: 'A video calling app',
-  icons:'https://res.cloudinary.com/dql0zlcgp/image/upload/v1713865277/logo_Logo_wd3fo9.svg',
 };
 
 const RootLayout = ({ children }: Readonly<{children: ReactNode}>) => {
