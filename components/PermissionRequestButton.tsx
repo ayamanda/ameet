@@ -1,3 +1,4 @@
+import React from 'react';
 import { OwnCapability, useRequestPermission } from '@stream-io/video-react-sdk';
 
 interface PermissionRequestButtonProps {
