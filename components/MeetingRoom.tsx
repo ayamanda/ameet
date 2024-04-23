@@ -35,7 +35,7 @@ interface MeetingRoomProps extends DefaultSeoProps {
 
 type CallLayoutType = 'grid'| 'speaker-up' | 'speaker-down' | 'speaker-left' | 'speaker-right'  ;
 
-const MeetingRoom = ({ meetingLink, logo, ...seoProps }: MeetingRoomProps) => {
+const MeetingRoom = ({ ...seoProps }: MeetingRoomProps) => {
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
   const [showParticipants, setShowParticipants] = useState(false);
 
@@ -43,6 +43,10 @@ const MeetingRoom = ({ meetingLink, logo, ...seoProps }: MeetingRoomProps) => {
 
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
+
+  const meetingLink = window.location.href;
+  const logo = 'https://res.cloudinary.com/dql0zlcgp/image/upload/v1713865277/logo_Logo_wd3fo9.svg';
+
 
   const copyLinkToClipboard = () => {
     navigator.clipboard.writeText(meetingLink)
