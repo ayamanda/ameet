@@ -1,5 +1,7 @@
 'use client';
 
+import { Metadata } from 'next';
+
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
@@ -10,6 +12,13 @@ import { useGetCallById } from '@/hooks/useGetCallById';
 import Alert from '@/components/Alert';
 import MeetingSetup from '@/components/MeetingSetup';
 import MeetingRoom from '@/components/MeetingRoom';
+
+
+export const metadata: Metadata = {
+  title: "Ameet",
+  description: "Video calling App",
+  icons: 'https://res.cloudinary.com/dql0zlcgp/image/upload/v1713865277/logo_Logo_wd3fo9.svg',
+};
 
 const MeetingPage = () => {
   const { id } = useParams();

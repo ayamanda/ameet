@@ -14,9 +14,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Ameet",
   description: "Video calling App",
-  icons: {
-    icon: "/icons/logo.svg",
-  },
+  icons: 'https://res.cloudinary.com/dql0zlcgp/image/upload/v1713865277/logo_Logo_wd3fo9.svg',
 };
 
 export default function RootLayout({
