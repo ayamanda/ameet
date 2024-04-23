@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
-import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
+import { StreamCall, StreamTheme, useConnectedUser } from '@stream-io/video-react-sdk';
 import { useParams } from 'next/navigation';
 import { Loader } from 'lucide-react';
 
@@ -17,7 +17,12 @@ const MeetingPage = () => {
   const { id } = useParams();
   const { isLoaded, user } = useUser();
   const { call, isCallLoading } = useGetCallById(id);
-  const [isSetupComplete, setIsSetupComplete] = useState(false);
+  const [isSetupComplete, setIsSetupComplete] = useState(false);;
+  const connectedUser = useConnectedUser();
+
+  const customUsername = connectedUser ? connectedUser.name : window.prompt('Enter your username');
+
+  if (!isLoaded || isCallLoading) return <Loader />;
 
   if (!isLoaded || isCallLoading) return <Loader />;
 
@@ -39,7 +44,7 @@ const MeetingPage = () => {
         {!isSetupComplete ? (
           <MeetingSetup setIsSetupComplete={setIsSetupComplete} />
         ) : (
-          <MeetingRoom meetingLink={''} logo={''} />
+          <MeetingRoom />
         )}
         </StreamTheme>
       </StreamCall>
