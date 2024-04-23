@@ -45,7 +45,6 @@ const MeetingRoom = ({ ...seoProps }: MeetingRoomProps) => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
-  const logo = 'https://res.cloudinary.com/dql0zlcgp/image/upload/v1713865277/logo_Logo_wd3fo9.svg';
 
 
   const copyLinkToClipboard = () => {
