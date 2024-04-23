@@ -2,7 +2,7 @@
 
 import { CancelCallButton, useCall, useCallStateHooks } from '@stream-io/video-react-sdk';
 import { PhoneOff, ArrowRightFromLine } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +12,8 @@ import {
 } from './ui/dropdown-menu';
 
 const EndCallButton = () => {
+  const searchParams = useSearchParams();
+  const isPersonalRoom = !!searchParams.get('personal');
   const call = useCall();
   const router = useRouter();
 
@@ -40,7 +42,7 @@ const EndCallButton = () => {
     call.state.createdBy &&
     localParticipant.userId === call.state.createdBy.id;
 
-  if (!isMeetingOwner) return <CancelCallButton onLeave={() => router.push(`/`)} />;
+  if (!isMeetingOwner || isPersonalRoom) return <CancelCallButton onLeave={() => router.push(`/`)} />;
 
   return (
     <DropdownMenu>

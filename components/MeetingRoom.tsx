@@ -25,13 +25,17 @@ import Loader from './Loader';
 import EndCallButton from './EndCallButton';
 import { cn } from '@/lib/utils';
 import QRCode from 'react-qr-code';
-import { Helmet } from 'react-helmet';
+import { GetServerSideProps } from 'next';
+import { DefaultSeoProps, NextSeo } from 'next-seo';
 
-
+interface MeetingRoomProps extends DefaultSeoProps {
+  meetingLink: string;
+  logo: string;
+}
 
 type CallLayoutType = 'grid'| 'speaker-up' | 'speaker-down' | 'speaker-left' | 'speaker-right'  ;
 
-const MeetingRoom = () => {
+const MeetingRoom = ({ meetingLink, logo, ...seoProps }: MeetingRoomProps) => {
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
   const [showParticipants, setShowParticipants] = useState(false);
 
@@ -39,10 +43,6 @@ const MeetingRoom = () => {
 
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
-
-  const meetingLink = window.location.href;
-  const logo = 'https://ipfsjgveqehtrwgtyowt.supabase.co/storage/v1/object/public/project-logos/1712987448632-logo.svg';
-
 
   const copyLinkToClipboard = () => {
     navigator.clipboard.writeText(meetingLink)
@@ -95,13 +95,7 @@ const MeetingRoom = () => {
 
   return (
     <section className="relative h-screen w-full overflow-hidden pt-4 text-white">
-      <Helmet>
-        <meta property="og:url" content={meetingLink} />
-        <meta property="og:title" content="Join our meeting" />
-        <meta property="og:description" content="Come join us for an important meeting!" />
-        <meta property="og:image" content={logo} />
-        <meta property="og:site_name" content="Ameet" />
-      </Helmet>
+      <NextSeo {...seoProps} />
       <div className="relative flex size-full items-center justify-center">
         <div className="flex size-full max-w-[1000px] items-center">
           <CallLayout />
@@ -262,6 +256,39 @@ const MeetingRoom = () => {
       </div>
     </section>
   );
+};
+
+export const getServerSideProps: GetServerSideProps<MeetingRoomProps> = async ({ req }) => {
+  const meetingLink = `${req.headers.host}${req.url}`;
+  const logo = 'https://res.cloudinary.com/dql0zlcgp/image/upload/v1713865277/logo_Logo_wd3fo9.svg';
+
+  const seoProps: DefaultSeoProps = {
+    title: 'Join our meeting',
+    description: 'Come join us for an important meeting!',
+    canonical: meetingLink,
+    openGraph: {
+      url: meetingLink,
+      title: 'Join our meeting',
+      description: 'Come join us for an important meeting!',
+      images: [
+        {
+          url: logo,
+          width: 800,
+          height: 600,
+          alt: 'Ameet logo',
+        },
+      ],
+      site_name: 'Ameet',
+    },
+  };
+
+  return {
+    props: {
+      ...seoProps,
+      meetingLink,
+      logo,
+    },
+  };
 };
 
 export default MeetingRoom;
