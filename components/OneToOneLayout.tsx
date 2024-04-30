@@ -1,4 +1,4 @@
-import { ParticipantView, useCallStateHooks } from '@stream-io/video-react-sdk';
+import { ParticipantView, SpeakerLayout, useCallStateHooks } from '@stream-io/video-react-sdk';
 import React, { useState, useEffect } from 'react';
 
 const OneToOneLayout: React.FC = () => {
@@ -20,6 +20,12 @@ const OneToOneLayout: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  if (isMobile){
+    return(
+        <SpeakerLayout participantsBarPosition="bottom" />
+    )
+  }
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center">
