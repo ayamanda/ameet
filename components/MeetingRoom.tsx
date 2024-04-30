@@ -45,7 +45,7 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
-  const logo = "/icons/logo.svg";
+
 
 
   const copyLinkToClipboard = () => {

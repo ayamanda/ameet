@@ -1,4 +1,4 @@
-import { ParticipantView, StreamVideoParticipant, useCallStateHooks } from '@stream-io/video-react-sdk';
+import { ParticipantView, useCallStateHooks } from '@stream-io/video-react-sdk';
 import React, { useState, useEffect } from 'react';
 
 const OneToOneLayout: React.FC = () => {
