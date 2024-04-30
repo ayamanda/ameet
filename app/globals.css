@@ -97,6 +97,10 @@
   color: white;
 }
 
+.str-video__call-controls__button.str-video__menu-toggle-button {
+  height: auto;
+}
+
 /* =============================== */
 
 @layer utilities {

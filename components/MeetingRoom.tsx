@@ -15,7 +15,7 @@ import {
   ToggleVideoPublishingButton,
   useCallStateHooks,
 } from '@stream-io/video-react-sdk';
-import { Users, LayoutList, Copy, Share, Mail } from 'lucide-react';
+import { Users, LayoutList, Copy, Share, Mail, Mic, Camera } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,9 +27,10 @@ import Loader from './Loader';
 import EndCallButton from './EndCallButton';
 import { cn } from '@/lib/utils';
 import QRCode from 'react-qr-code';
-import { Helmet } from 'react-helmet';
 import PermissionRequestButton from './PermissionRequestButton';
 
+import Image from 'next/image';
+import Link from 'next/link';
 
 
 type CallLayoutType = 'grid'| 'speaker-up' | 'speaker-down' | 'speaker-left' | 'speaker-right'  ;
@@ -44,7 +45,7 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
-  const logo = 'https://ipfsjgveqehtrwgtyowt.supabase.co/storage/v1/object/public/project-logos/1712987448632-logo.svg';
+  const logo = "/icons/logo.svg";
 
 
   const copyLinkToClipboard = () => {
@@ -97,14 +98,22 @@ const MeetingRoom = () => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
-    <section className="relative h-screen w-full overflow-hidden pt-4 text-white">
-      <Helmet>
-        <meta property="og:url" content={meetingLink} />
-        <meta property="og:title" content="Join our meeting" />
-        <meta property="og:description" content="Come join us for an important meeting!" />
-        <meta property="og:image" content={logo} />
-        <meta property="og:site_name" content="Ameet" />
-      </Helmet>
+    <section className="relative h-screen w-full overflow-hidden pt-4 text-white bg-slate-950">
+      <div className="absolute top-4 left-4">
+        <Link href="/" className="flex items-center gap-1">
+          <Image
+            src="/icons/logo.svg"
+            width={32}
+            height={32}
+            alt="Ameet logo"
+            className="max-sm:size-10"
+          />
+          <p className="text-[26px] font-extrabold text-white max-sm:hidden">Ameet</p>
+        </Link>
+      </div>
+      <div >
+        <PermissionRequests />
+      </div>
       <div className="relative flex size-full items-center justify-center">
         <div className="flex size-full max-w-[1000px] items-center">
           <CallLayout />
@@ -116,7 +125,7 @@ const MeetingRoom = () => {
         >
           <CallParticipantsList onClose={() => setShowParticipants(false)} />
         </div>
-        <PermissionRequests />
+
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center gap-5 pb-4">
@@ -131,17 +140,18 @@ const MeetingRoom = () => {
         <ToggleVideoPublishingButton />
         <EndCallButton/>
         
-        {/* Permission request buttons */}
-        <PermissionRequestButton capability={OwnCapability.SEND_AUDIO}>
-          Request Audio Permission
-        </PermissionRequestButton>
-        <PermissionRequestButton capability={OwnCapability.SEND_VIDEO}>
-          Request Video Permission
-        </PermissionRequestButton>
-        <PermissionRequestButton capability={OwnCapability.SCREENSHARE}>
-          Request Screen Share Permission
-        </PermissionRequestButton>
-        
+        <div className="flex items-center gap-4">
+          {/* Permission request buttons */}
+          <PermissionRequestButton capability={OwnCapability.SEND_AUDIO}>
+            <Mic size={20} className="text-white" />
+          </PermissionRequestButton>
+          <PermissionRequestButton capability={OwnCapability.SEND_VIDEO}>
+            <Camera size={20} className="text-white" />
+          </PermissionRequestButton>
+          <PermissionRequestButton capability={OwnCapability.SCREENSHARE}>
+            <Share size={20} className="text-white" />
+          </PermissionRequestButton>
+        </div>
 
         {!isMobile && (
           <>
