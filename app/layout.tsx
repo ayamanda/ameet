@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: "Ameet",
   description: "Video calling App",
   icons: {
-    icon: "/icons/logo.svg",
+    icon: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/logo.svg`,
   },
 };
 

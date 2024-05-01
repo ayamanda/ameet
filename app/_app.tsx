@@ -14,7 +14,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       description: 'Join secure and reliable video meetings with Ameet.',
       images: [
         {
-          url: 'icons/logo.svg',
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/logo.svg`,
           width: 800,
           height: 600,
           alt: 'Ameet Logo',

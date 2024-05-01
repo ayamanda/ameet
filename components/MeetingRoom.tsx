@@ -33,7 +33,7 @@ import PermissionRequestButton from './PermissionRequestButton';
 import Image from 'next/image';
 import Link from 'next/link';
 import OneToOneLayout from './OneToOneLayout';
-import { useToast } from './ui/use-toast';
+
 
 
 type CallLayoutType = 'grid'| 'speaker-up' | 'speaker-down' | 'speaker-left' | 'speaker-right' | 'one-one' ;
@@ -48,7 +48,7 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
-  const { toast } = useToast();
+
 
 
 
