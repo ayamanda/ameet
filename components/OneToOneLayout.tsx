@@ -1,4 +1,4 @@
-import { ParticipantView, SpeakerLayout, useCallStateHooks } from '@stream-io/video-react-sdk';
+import { ParticipantView, useCallStateHooks } from '@stream-io/video-react-sdk';
 import React, { useState, useEffect } from 'react';
 
 const OneToOneLayout: React.FC = () => {
@@ -23,7 +23,18 @@ const OneToOneLayout: React.FC = () => {
 
   if (isMobile){
     return(
-        <SpeakerLayout participantsBarPosition="bottom" />
+      <div className="relative flex h-full w-full flex-col items-center justify-center">
+        {remoteParticipants.map((participant) => (
+          <div key={participant.sessionId} className="h-1/2 w-full pt-[25%] p-2">
+            <ParticipantView participant={participant} />
+          </div>
+        ))}
+        {localParticipant && (
+          <div className="h-1/2 w-full p-2">
+            <ParticipantView participant={localParticipant} />
+          </div>
+        )}
+      </div>
     )
   }
 
@@ -39,11 +50,6 @@ const OneToOneLayout: React.FC = () => {
       {!isMobile && localParticipant && (
         <div className="absolute top-4 right-4 z-5 w-64 overflow-hidden rounded-lg shadow-lg" style={{ aspectRatio: '16/9' }}>
           <ParticipantView participant={localParticipant} />
-        </div>
-      )}
-      {isMobile && localParticipant && (
-        <div className="absolute bottom-4 right-4 z-5 w-64 overflow-hidden rounded-lg shadow-lg" style={{ aspectRatio: '16/9' }}>
-            <ParticipantView participant={localParticipant} />
         </div>
       )}
     </div>

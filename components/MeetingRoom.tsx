@@ -6,6 +6,7 @@ import {
   OwnCapability,
   PaginatedGridLayout,
   PermissionRequests,
+  ReactionsButton,
   RecordCallConfirmationButton,
   RecordingInProgressNotification,
   ScreenShareButton,
@@ -32,9 +33,10 @@ import PermissionRequestButton from './PermissionRequestButton';
 import Image from 'next/image';
 import Link from 'next/link';
 import OneToOneLayout from './OneToOneLayout';
+import { useToast } from './ui/use-toast';
 
 
-type CallLayoutType = 'grid'| 'speaker-up' | 'speaker-down' | 'speaker-left' | 'speaker-right'  ;
+type CallLayoutType = 'grid'| 'speaker-up' | 'speaker-down' | 'speaker-left' | 'speaker-right' | 'one-one' ;
 
 const MeetingRoom = () => {
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
@@ -46,6 +48,7 @@ const MeetingRoom = () => {
   const callingState = useCallCallingState();
 
   const meetingLink = window.location.href;
+  const { toast } = useToast();
 
 
 
@@ -87,6 +90,13 @@ const MeetingRoom = () => {
         return <SpeakerLayout participantsBarPosition="bottom" />;
       case 'speaker-down':
         return <SpeakerLayout participantsBarPosition="top" />;
+      
+      case 'one-one':
+        return isOneOnOneCall ?(
+          <OneToOneLayout/>):(
+            <SpeakerLayout participantsBarPosition="top" />
+          )
+      
       default:
         return isOneOnOneCall ? (
           <OneToOneLayout/>
@@ -138,6 +148,7 @@ const MeetingRoom = () => {
               <RecordingInProgressNotification>
                 <RecordCallConfirmationButton/>
               </RecordingInProgressNotification>
+              <ReactionsButton/>
               <SpeakingWhileMutedNotification>
                 <ToggleAudioPublishingButton />
               </SpeakingWhileMutedNotification>
@@ -247,7 +258,7 @@ const MeetingRoom = () => {
           </div>
         </div>
         <div className="fixed top-5 left-5 right-5 flex items-center justify-center gap-5 bg-dark-2 backdrop-blur-md rounded-full p-2 shadow-lg">
-
+            <ReactionsButton/>
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]">
                 <LayoutList size={20} className="text-white" />
@@ -313,6 +324,6 @@ const MeetingRoom = () => {
         )}
     </section>
   );
-};
+}
 
 export default MeetingRoom;

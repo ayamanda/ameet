@@ -14,7 +14,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       description: 'Join secure and reliable video meetings with Ameet.',
       images: [
         {
-          url: 'https://res.cloudinary.com/dql0zlcgp/image/upload/v1713865277/logo_Logo_wd3fo9.svg',
+          url: 'icons/logo.svg',
           width: 800,
           height: 600,
           alt: 'Ameet Logo',
