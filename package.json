@@ -33,6 +33,7 @@
     "react": "^18",
     "react-datepicker": "^6.3.0",
     "react-dom": "^18",
+    "react-draggable": "^4.4.6",
     "react-helmet": "^6.1.0",
     "react-qr-code": "^2.0.12",
     "stream-chat": "^8.26.0",
