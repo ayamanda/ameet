@@ -44,7 +44,7 @@ async function playSoundFromUrl(url: string) {
     const canPlayPromise = new Promise<HTMLAudioElement>((resolve, reject) => {
       const audio = new Audio(url);
       audio.addEventListener('canplaythrough', () => resolve(audio), { once: true });
-      audio.addEventListener('error', () => reject(`Failed to load audio file at ${url}`), { once: true });
+      audio.addEventListener('error', () => reject(new Error(`Failed to load audio file at ${url}`)), { once: true });
     });
 
     doPlay = async () => {
@@ -65,6 +65,7 @@ async function playSoundFromUrl(url: string) {
     console.error(`Error playing sound from ${url}`, error);
   }
 }
+
 
 // Custom hook for notification sounds
 function useNotificationSounds() {
