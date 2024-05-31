@@ -40,11 +40,13 @@ const MeetingPage = () => {
     openGraph: {
       title: `Meeting ID: ${call.id} - Ameet Video Meeting`,
       description: `Join the video meeting with ID "${call.id}" hosted on Ameet.`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${call.id}`,
+      site_name: 'Ameet',
       images: [
         {
-          url: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/logo.svg`,
-          width: 800,
-          height: 600,
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/opengraph.png`,
+          width: 1200,
+          height: 630,
           alt: 'Ameet Logo',
         },
       ],
@@ -61,10 +63,11 @@ const MeetingPage = () => {
     "@type": "VideoObject",
     "name": `Meeting ID: ${call.id} - Ameet Video Meeting`,
     "description": `Join the video meeting with ID "${call.id}" hosted on Ameet.`,
-    "thumbnailUrl": `${process.env.NEXT_PUBLIC_BASE_URL}/icons/logo.svg`,
+    "thumbnailUrl": `${process.env.NEXT_PUBLIC_BASE_URL}/icons/opengraph.png`,
     "duration": "PT1H", // Adjust as necessary
     "contentUrl": `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${call.id}`,
     "embedUrl": `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${call.id}`,
+
   };
 
   const notAllowed = call.type === 'invited' && (!user || !call.state.members.find((m) => m.user.id === user.id));

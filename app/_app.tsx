@@ -1,11 +1,11 @@
+import type { AppProps } from 'next/app';
 import { DefaultSeo } from 'next-seo';
-import { AppProps } from 'next/app';
-import Head from 'next/head';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const defaultSEOConfig = {
     title: 'Ameet - Video Conferencing App',
     description: 'Join secure and reliable video meetings with Ameet.',
+    canonical: process.env.NEXT_PUBLIC_BASE_URL,
     openGraph: {
       type: 'website',
       locale: 'en_US',
@@ -15,9 +15,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       description: 'Join secure and reliable video meetings with Ameet.',
       images: [
         {
-          url: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/logo.svg`,
-          width: 800,
-          height: 600,
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/opengraph.png`,
+          width: 1200,
+          height: 630,
           alt: 'Ameet Logo',
         },
       ],
@@ -29,28 +29,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     },
   };
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Ameet",
-    "url": process.env.NEXT_PUBLIC_BASE_URL,
-    "logo": `${process.env.NEXT_PUBLIC_BASE_URL}/icons/logo.svg`,
-    "sameAs": [
-      "https://twitter.com/ameet",
-      "https://www.facebook.com/ameet",
-      "https://www.linkedin.com/company/ameet"
-    ],
-  };
-
   return (
     <>
       <DefaultSeo {...defaultSEOConfig} />
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-      </Head>
       <Component {...pageProps} />
     </>
   );
