@@ -22,7 +22,7 @@ interface SettingsDialogProps {
 }
 
 const SettingsDialog: React.FC<SettingsDialogProps> = ({ layout, setLayout }) => {
-  const [activeTab, setActiveTab] = useState('layout');
+  const [, setActiveTab] = useState('layout');
   const [showCallStats, setShowCallStats] = useState(false);
 
   // Array of layout options with labels and values
