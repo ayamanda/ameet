@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
 import { useParams } from 'next/navigation';
@@ -9,13 +9,22 @@ import { useGetCallById } from '@/hooks/useGetCallById';
 import Alert from '@/components/Alert';
 import MeetingSetup from '@/components/MeetingSetup';
 import MeetingRoom from '@/components/MeetingRoom';
+import Head from 'next/head';
 
 const MeetingPage = () => {
   const { id } = useParams();
   const { isLoaded, user } = useUser();
   const { call, isCallLoading } = useGetCallById(id);
   const [isSetupComplete, setIsSetupComplete] = useState(false);
-  const [isCallEnded, setIsCallEnded] = useState(false); // New state to track if the call has ended
+  const [isCallEnded, setIsCallEnded] = useState(false);
+
+  useEffect(() => {
+    if (call) {
+      call.on('call.ended', () => {
+        setIsCallEnded(true);
+      });
+    }
+  }, [call]);
 
   if (!isLoaded || isCallLoading) return <Loader />;
 
@@ -40,13 +49,28 @@ const MeetingPage = () => {
         },
       ],
     },
+    twitter: {
+      handle: '@ameet',
+      site: '@ameet',
+      cardType: 'summary_large_image',
+    },
+  };
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": `Meeting ID: ${call.id} - Ameet Video Meeting`,
+    "description": `Join the video meeting with ID "${call.id}" hosted on Ameet.`,
+    "thumbnailUrl": `${process.env.NEXT_PUBLIC_BASE_URL}/icons/logo.svg`,
+    "duration": "PT1H", // Adjust as necessary
+    "contentUrl": `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${call.id}`,
+    "embedUrl": `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${call.id}`,
   };
 
   const notAllowed = call.type === 'invited' && (!user || !call.state.members.find((m) => m.user.id === user.id));
 
   if (notAllowed) return <Alert title="You are not allowed to join this meeting" />;
 
-  // Check if the call has ended
   if (isCallEnded) {
     return (
       <Alert
@@ -56,14 +80,15 @@ const MeetingPage = () => {
     );
   }
 
-  // Handle the call.ended event
-  call.on('call.ended', () => {
-    setIsCallEnded(true);
-  });
-
   return (
     <main className="h-screen w-full">
       <NextSeo {...meetingMetadata} />
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </Head>
       <StreamCall call={call}>
         <StreamTheme>
           {!isSetupComplete ? (
