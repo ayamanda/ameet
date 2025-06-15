@@ -8,6 +8,18 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    esmExternals: false,
+  },
+  // Add this to handle client-side rendering for responsive components
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
+    return config;
+  },
+
 };
 
 export default nextConfig;

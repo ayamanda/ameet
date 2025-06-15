@@ -70,33 +70,34 @@ const MeetingTypeList = () => {
   const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetail?.id}`;
 
   return (
-    <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+    <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
       <HomeCard
         img="/icons/add-meeting.svg"
         title="New Meeting"
         description="Start an instant meeting"
         handleClick={() => setMeetingState('isInstantMeeting')}
+        className="group bg-gradient-to-br from-blue-950/50 via-blue-900/30 to-blue-950/50 hover:from-blue-900/50 hover:via-blue-800/30 hover:to-blue-900/50"
       />
       <HomeCard
         img="/icons/join-meeting.svg"
         title="Join Meeting"
         description="via invitation link"
-        className="bg-green-1"
+        className="group bg-gradient-to-br from-emerald-950/50 via-emerald-900/30 to-emerald-950/50 hover:from-emerald-900/50 hover:via-emerald-800/30 hover:to-emerald-900/50"
         handleClick={() => setMeetingState('isJoiningMeeting')}
       />
       <HomeCard
         img="/icons/schedule.svg"
         title="Schedule Meeting"
         description="Plan your meeting"
-        className="bg-purple-1"
+        className="group bg-gradient-to-br from-purple-950/50 via-purple-900/30 to-purple-950/50 hover:from-purple-900/50 hover:via-purple-800/30 hover:to-purple-900/50"
         handleClick={() => setMeetingState('isScheduleMeeting')}
       />
       <HomeCard
         img="/icons/recordings.svg"
         title="View Recordings"
         description="Meeting Recordings"
-        className="bg-yellow-1"
-        handleClick={() => router.push('/recordings')}
+        className="group bg-gradient-to-br from-amber-950/50 via-amber-900/30 to-amber-950/50 hover:from-amber-900/50 hover:via-amber-800/30 hover:to-amber-900/50"
+        handleClick={() => router.push('/dashboard/recordings')}
       />
 
       {!callDetail ? (
