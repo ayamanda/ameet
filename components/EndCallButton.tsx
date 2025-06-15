@@ -44,19 +44,19 @@ const EndCallButton = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="cursor-pointer rounded-2xl px-4 py-2 bg-red-500 hover:bg-red-400  transition-colors duration-300">
+      <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-red-500 px-4 py-2 transition-colors  duration-300 hover:bg-red-400">
         <PhoneOff size={20} className="text-white " />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
-        <DropdownMenuItem onClick={leaveCall} className="flex items-center justify-between hover:bg-white hover:text-red-500 transition-colors duration-300">
+        <DropdownMenuItem onClick={leaveCall} className="flex items-center justify-between transition-colors duration-300 hover:bg-white hover:text-red-500">
           <div className="flex items-center gap-2 ">
             <ArrowRightFromLine  size={20}/> leave call
             
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="border-dark-1" />
-        <DropdownMenuItem onClick={endCall} className="flex items-center justify-between hover:bg-white hover:text-red-500 transition-colors duration-300">
-          <div className="cursor-pointer rounded-2xl px-4 py-2 bg-red-500">
+        <DropdownMenuItem onClick={endCall} className="flex items-center justify-between transition-colors duration-300 hover:bg-white hover:text-red-500">
+          <div className="cursor-pointer rounded-2xl bg-red-500 px-4 py-2">
             End Call for All
           </div>
         </DropdownMenuItem>

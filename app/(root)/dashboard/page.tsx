@@ -41,13 +41,13 @@ const Home = () => {
         className="relative w-full overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
       >
         {/* Grid background */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
         
         {/* Animated background elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-8 right-8 h-32 w-32 animate-pulse rounded-full bg-blue-500/5 blur-2xl" />
-          <div className="absolute bottom-12 left-12 h-24 w-24 animate-pulse rounded-full bg-purple-500/5 blur-xl delay-1000" />
-          <div className="absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-pink-500/3 blur-3xl delay-500" />
+          <div className="absolute right-8 top-8 size-32 animate-pulse rounded-full bg-blue-500/5 blur-2xl" />
+          <div className="absolute bottom-12 left-12 size-24 animate-pulse rounded-full bg-purple-500/5 blur-xl delay-1000" />
+          <div className="bg-pink-500/3 absolute left-1/2 top-1/2 size-96 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full blur-3xl delay-500" />
         </div>
         
         <div className="relative z-10 grid grid-cols-1 gap-8 p-8 md:grid-cols-2 lg:p-12">
@@ -84,14 +84,14 @@ const Home = () => {
             >
               <div className="rounded-xl border border-slate-700/40 bg-slate-900/60 p-4 backdrop-blur-md">
                 <div className="mb-2 flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-blue-400" />
-                  <span className="text-sm font-medium text-blue-400">Today's Meetings</span>
+                  <Calendar className="size-4 text-blue-400" />
+                  <span className="text-sm font-medium text-blue-400">Today&apos;s Meetings</span>
                 </div>
                 <p className="text-2xl font-bold">0</p>
               </div>
               <div className="rounded-xl border border-slate-700/40 bg-slate-900/60 p-4 backdrop-blur-md">
                 <div className="mb-2 flex items-center gap-2">
-                  <Users className="h-4 w-4 text-purple-400" />
+                  <Users className="size-4 text-purple-400" />
                   <span className="text-sm font-medium text-purple-400">Total Participants</span>
                 </div>
                 <p className="text-2xl font-bold">0</p>
@@ -107,7 +107,7 @@ const Home = () => {
             transition={{ delay: 0.5, duration: 0.4 }}
           >
             <div className="flex items-center gap-3 rounded-2xl border border-slate-700/40 bg-slate-900/60 px-4 py-3 backdrop-blur-md">
-              <Clock className="h-5 w-5 text-white/70" />
+              <Clock className="size-5 text-white/70" />
               <span className="text-lg font-medium text-white/90">{time}</span>
             </div>
             

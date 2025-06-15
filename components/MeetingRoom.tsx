@@ -107,17 +107,30 @@ type CallLayoutType = 'grid' | 'speaker-up' | 'speaker-down' | 'speaker-left' | 
 const MeetingRoom = () => {
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
   const [showParticipants, setShowParticipants] = useState(false);
-
   const [linkCopied, setLinkCopied] = useState(false);
+  const [meetingLink, setMeetingLink] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
 
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
-  const [meetingLink, setMeetingLink] = useState('');
-
+  // Set up meeting link and mobile detection
   useEffect(() => {
     // This ensures window is defined (runs on client-side only)
     setMeetingLink(window.location.href);
+    
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Set initial value
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const copyLinkToClipboard = () => {
@@ -166,26 +179,11 @@ const MeetingRoom = () => {
     }
   };
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    // Set initial value
-    handleResize();
-    
-    // Add event listener
-    window.addEventListener('resize', handleResize);
-    
-    // Clean up
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  // Mobile detection is now handled in the main useEffect
 
   return (
-    <section className="relative h-screen w-full overflow-hidden pt-4 text-white bg-slate-950">
-      <div className="absolute top-4 left-4">
+    <section className="relative h-screen w-full overflow-hidden bg-slate-950 pt-4 text-white">
+      <div className="absolute left-4 top-4">
         <Link href="/" className="flex items-center gap-1">
           <Image src="/icons/logo.svg" width={32} height={32} alt="Ameet logo" className="max-sm:hidden" />
         </Link>
@@ -204,7 +202,7 @@ const MeetingRoom = () => {
 
       {!isMobile && (
         <>
-          <div className="fixed bottom-0 left-0 right-0 m-auto max-w-[60%] flex items-center justify-center gap-5 pb-4 bg-[#19232d]/50 backdrop-blur-md rounded-full p-2 shadow-lg">
+          <div className="fixed inset-x-0 bottom-0 m-auto flex max-w-[60%] items-center justify-center gap-5 rounded-full bg-[#19232d]/50 p-2 pb-4 shadow-lg backdrop-blur-md">
             {!isMobile && <ScreenShareButton />}
             <RecordingInProgressNotification>
               <RecordCallConfirmationButton />
@@ -252,14 +250,14 @@ const MeetingRoom = () => {
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="border-dark-1" />
                   <DropdownMenuItem className="flex items-center justify-between">
-                    <div className="bg-white p-2 rounded justify-center">
+                    <div className="justify-center rounded bg-white p-2">
                       <QRCode value={meetingLink} size={100} />
                     </div>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="border-dark-1" />
                   <DropdownMenuItem onClick={openWhatsApp}>
                     <div className="flex items-center gap-2">
-                      <img src="/icons/whatsapp.svg" alt="WhatsApp" className="h-4 w-4" />
+                      <img src="/icons/whatsapp.svg" alt="WhatsApp" className="size-4" />
                       Share on WhatsApp
                     </div>
                   </DropdownMenuItem>
@@ -278,7 +276,7 @@ const MeetingRoom = () => {
 
       {isMobile && (
         <>
-          <div className="fixed bottom-2 left-5 right-5 flex items-center justify-center gap-5 bg-dark-2 backdrop-blur-md rounded-full p-2 shadow-lg">
+          <div className="fixed inset-x-5 bottom-2 flex items-center justify-center gap-5 rounded-full bg-dark-2 p-2 shadow-lg backdrop-blur-md">
             {!isMobile && <ScreenShareButton />}
             <RecordingInProgressNotification>
               <RecordCallConfirmationButton />
@@ -302,7 +300,7 @@ const MeetingRoom = () => {
               </PermissionRequestButton>
             </div>
           </div>
-          <div className="fixed top-5 left-5 right-5 flex items-center justify-center gap-5 bg-dark-2 backdrop-blur-md rounded-full p-2 shadow-lg">
+          <div className="fixed inset-x-5 top-5 flex items-center justify-center gap-5 rounded-full bg-dark-2 p-2 shadow-lg backdrop-blur-md">
             <ReactionsButton />
             <SettingsDialog layout={layout} setLayout={setLayout} />
 
@@ -327,14 +325,14 @@ const MeetingRoom = () => {
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="border-dark-1" />
                   <DropdownMenuItem className="flex items-center justify-between">
-                    <div className="bg-white p-2 rounded justify-center">
+                    <div className="justify-center rounded bg-white p-2">
                       <QRCode value={meetingLink} size={100} />
                     </div>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="border-dark-1" />
                   <DropdownMenuItem onClick={openWhatsApp}>
                     <div className="flex items-center gap-2">
-                      <img src="/icons/whatsapp.svg" alt="WhatsApp" className="h-4 w-4" />
+                      <img src="/icons/whatsapp.svg" alt="WhatsApp" className="size-4" />
                       Share on WhatsApp
                     </div>
                   </DropdownMenuItem>

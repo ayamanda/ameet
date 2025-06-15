@@ -45,38 +45,38 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({ layout, setLayout }) =>
     <Dialog>
       {/* Trigger button to open the settings dialog */}
       <DialogTrigger asChild>
-        <button className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b] transition-colors">
+        <button className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 transition-colors hover:bg-[#4c535b]">
           <Settings size={20} className="text-white" />
         </button>
       </DialogTrigger>
       {/* Dialog content */}
-      <DialogContent className="sm:w-full shadow-lg rounded-lg border bg-slate-900 text-white">
+      <DialogContent className="rounded-lg border bg-slate-900 text-white shadow-lg sm:w-full">
         <DialogHeader>
           <DialogTitle className="text-white">Settings</DialogTitle>
-          <DialogDescription className="text-slate-400 mb-4">
+          <DialogDescription className="mb-4 text-slate-400">
             Customize your meeting experience.
           </DialogDescription>
         </DialogHeader>
         {/* Tabs container */}
         <Tabs defaultValue="layout" onValueChange={handleTabChange}>
           {/* Tabs at the top */}
-          <TabsList className="flex justify-center mb-4 bg-slate-800 rounded-t-lg">
-            <TabsTrigger value="layout" className="w-full py-2 rounded-tl-lg">
+          <TabsList className="mb-4 flex justify-center rounded-t-lg bg-slate-800">
+            <TabsTrigger value="layout" className="w-full rounded-tl-lg py-2">
               Layout
             </TabsTrigger>
-            <TabsTrigger value="call-stats" className="w-full py-2 rounded-tr-lg">
+            <TabsTrigger value="call-stats" className="w-full rounded-tr-lg py-2">
               Call Stats
             </TabsTrigger>
           </TabsList>
           {/* Content area */}
-          <ScrollArea className="h-[500px] sm:h-[400px] p-4 bg-slate-800 rounded-b-lg">
+          <ScrollArea className="h-[500px] rounded-b-lg bg-slate-800 p-4 sm:h-[400px]">
             <TabsContent value="layout">
-              <h2 className="text-white mb-4">Select Layout</h2>
-              <div className="grid grid-cols-3 sm:grid-cols-2 gap-4">
+              <h2 className="mb-4 text-white">Select Layout</h2>
+              <div className="grid grid-cols-3 gap-4 sm:grid-cols-2">
                 {layouts.map((option) => (
                   <button
                     key={option.value}
-                    className={`p-4 rounded-lg flex flex-col items-center justify-center transition-colors text-sm sm:text-xs ${
+                    className={`flex flex-col items-center justify-center rounded-lg p-4 text-sm transition-colors sm:text-xs ${
                       layout === option.value
                         ? 'bg-blue-500 text-white'
                         : 'bg-slate-700 text-slate-400 hover:bg-slate-600 hover:text-white'

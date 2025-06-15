@@ -103,7 +103,7 @@ const Navbar = () => {
             {/* Custom manage account button */}
             <motion.button
               onClick={() => setIsProfileOpen(true)}
-              className="text-sm text-white/70 hover:text-white transition-colors duration-200"
+              className="text-sm text-white/70 transition-colors duration-200 hover:text-white"
             >
               Manage Account
             </motion.button>

@@ -34,13 +34,13 @@ const HomeCard = ({ className, img, title, description, handleClick }: HomeCardP
       
       {/* Animated glow effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        <div className="absolute -right-4 -top-4 size-32 rounded-full bg-gradient-to-br from-white/10 to-transparent opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute -bottom-8 -left-8 size-48 rounded-full bg-gradient-to-br from-white/5 to-transparent opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100" />
       </div>
       
       <div className="relative z-10">
         <motion.div 
-          className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm transition-all duration-300 group-hover:border-white/20 group-hover:from-white/15 group-hover:to-white/10"
+          className="mb-6 flex size-14 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm transition-all duration-300 group-hover:border-white/20 group-hover:from-white/15 group-hover:to-white/10"
           whileHover={{ rotate: 5 }}
         >
           <Image 

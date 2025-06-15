@@ -23,7 +23,7 @@ const PermissionRequestButton: React.FC<PermissionRequestButtonProps> = ({
     <button
       disabled={isAwaitingPermission}
       onClick={() => requestPermission()}
-      className="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed"
+      className="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 disabled:cursor-not-allowed disabled:bg-blue-300"
     >
       {children}
     </button>

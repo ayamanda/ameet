@@ -32,11 +32,11 @@ const OneToOneLayout: React.FC = () => {
   const remoteParticipantViews = useMemo(() => {
     if (isSomeoneScreenSharing) return null;
     return remoteParticipants.map((participant) => (
-      <div key={participant.sessionId} className={isMobile ? "h-1/2 w-full p-2" : "h-full w-full"}>
+      <div key={participant.sessionId} className={isMobile ? "h-1/2 w-full p-2" : "size-full"}>
         <MemoizedParticipantView participant={participant} />
       </div>
     ));
-  }, [remoteParticipants, isMobile]);
+  }, [remoteParticipants, isMobile, isSomeoneScreenSharing]);
 
   const localParticipantView = useMemo(() => {
     if (!localParticipant) return null;
@@ -51,10 +51,10 @@ const OneToOneLayout: React.FC = () => {
 
     return (
       <Draggable bounds="parent" handle=".drag-handle" grid={[25, 25]}>
-        <div className="absolute bottom-[100px] right-4 z-10 w-64 h-36 overflow-hidden rounded-lg shadow-lg transition-all duration-300">
-          <div className="relative h-full w-full group">
+        <div className="absolute bottom-[100px] right-4 z-10 h-36 w-64 overflow-hidden rounded-lg shadow-lg transition-all duration-300">
+          <div className="group relative size-full">
             <MemoizedParticipantView participant={localParticipant} />
-            <div className="drag-handle absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-2 flex items-center justify-center w-44 h-12 bg-black text-white text-sm rounded-lg cursor-move opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out shadow-md hover:shadow-xl">
+            <div className="drag-handle absolute bottom-0 left-1/2 mb-2 flex h-12 w-44 -translate-x-1/2 cursor-move items-center justify-center rounded-lg bg-black text-sm text-white opacity-0 shadow-md transition-opacity duration-300 ease-in-out hover:shadow-xl group-hover:opacity-100">
               <Move size={16} className="mr-2" />
               <span>Drag to Move</span>
             </div>
@@ -69,14 +69,14 @@ const OneToOneLayout: React.FC = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center">
+    <div className="relative flex size-full flex-col items-center justify-center">
       {isMobile ? (
-        <div className="flex flex-col items-center justify-center h-[calc(100vh-130px)] w-full">
+        <div className="flex h-[calc(100vh-130px)] w-full flex-col items-center justify-center">
           {remoteParticipantViews}
           {localParticipantView}
         </div>
       ) : (
-        <div className="h-[calc(100vh-130px)] w-full flex flex-col items-center">
+        <div className="flex h-[calc(100vh-130px)] w-full flex-col items-center">
           {remoteParticipantViews}
           {localParticipantView}
         </div>
