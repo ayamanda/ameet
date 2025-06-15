@@ -16,20 +16,14 @@ import {
   CameraOff, 
   Mic, 
   MicOff, 
-  Settings, 
   Users, 
   ArrowRight,
   Loader2,
   AlertCircle,
-  CheckCircle,
-  Volume2,
-  VolumeX,
-  Wifi
 } from 'lucide-react';
 
 import Alert from './Alert';
 import { Button } from './ui/button';
-import { AudioVolumeIndicator } from './AudioVolumeIndicator';
 import { ParticipantsPreview } from './Participants';
 
 interface MeetingSetupProps {
@@ -60,8 +54,7 @@ const MeetingSetup: React.FC<MeetingSetupProps> = ({ setIsSetupComplete }) => {
     camera: 'unknown' as 'granted' | 'denied' | 'unknown' | 'checking',
     microphone: 'unknown' as 'granted' | 'denied' | 'unknown' | 'checking'
   });
-  const [showDeviceSettings, setShowDeviceSettings] = useState(false);
-  const [audioLevel, setAudioLevel] = useState(0);
+
 
   // Time calculations
   const callTimeNotArrived = callStartsAt && new Date(callStartsAt) > new Date();
@@ -77,7 +70,7 @@ const MeetingSetup: React.FC<MeetingSetupProps> = ({ setIsSetupComplete }) => {
       try {
         // Check camera permission
         setDevicePermissions(prev => ({ ...prev, camera: 'checking' }));
-        const cameraPermission = await navigator.permissions.query({ name: 'camera' as PermissionName });
+        const cameraPermission = await navigator.permissions.query({ name: 'camera' as any });
         setDevicePermissions(prev => ({ 
           ...prev, 
           camera: cameraPermission.state as 'granted' | 'denied' 
@@ -85,7 +78,7 @@ const MeetingSetup: React.FC<MeetingSetupProps> = ({ setIsSetupComplete }) => {
 
         // Check microphone permission
         setDevicePermissions(prev => ({ ...prev, microphone: 'checking' }));
-        const micPermission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+        const micPermission = await navigator.permissions.query({ name: 'microphone' as any });
         setDevicePermissions(prev => ({ 
           ...prev, 
           microphone: micPermission.state as 'granted' | 'denied' 

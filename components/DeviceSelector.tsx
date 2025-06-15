@@ -1,7 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useCallStateHooks, useDeviceList } from "@stream-io/video-react-sdk";
+import { useCallStateHooks } from "@stream-io/video-react-sdk";
+
+type Device = {
+  deviceId: string;
+  label: string;
+  isSelected: boolean;
+};
 import { 
   Camera, 
   Mic, 
@@ -29,8 +35,13 @@ export const DeviceSelector = ({
   isOpen,
   onToggle,
 }: DeviceSelectorProps) => {
-  const { deviceList } = useDeviceList(devices, selectedDeviceId);
-  const selectedDevice = deviceList.find(device => device.isSelected);
+  const deviceList = devices.map(device => ({
+    deviceId: device.deviceId,
+    label: device.label || 'Unknown Device',
+    isSelected: device.deviceId === selectedDeviceId
+  }));
+  
+  const selectedDevice = deviceList.find(device => device.isSelected) || deviceList[0];
 
   return (
     <div className="relative">

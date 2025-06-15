@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Link as LinkIcon, Video, Users, Shield, Zap } from 'lucide-react';
+import { ArrowRight, Link as LinkIcon, Video, Users, Shield } from 'lucide-react';
 
 export default function LandingPage() {
   const [meetingLink, setMeetingLink] = useState('');
@@ -188,9 +188,9 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="relative z-10 py-6 border-t border-slate-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-slate-400 text-sm">
-            © 2024 Ameet. All rights reserved.
-          </p>
+            <p className="text-slate-400 text-sm">
+              &copy; 2024 Ameet. All rights reserved.
+            </p>
         </div>
       </footer>
     </div>

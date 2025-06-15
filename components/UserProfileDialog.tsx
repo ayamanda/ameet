@@ -13,7 +13,7 @@ const UserProfileDialog = ({ isOpen, onClose }: UserProfileDialogProps) => {
         <UserProfile 
           routing="hash"
           appearance={{
-            baseTheme: "dark",
+            baseTheme: undefined, // Let Clerk handle the theme based on system preference
             variables: {
               colorPrimary: "#3b82f6",
               colorText: "white",

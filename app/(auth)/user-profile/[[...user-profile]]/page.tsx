@@ -8,7 +8,7 @@ const UserProfilePage = () => {
       
       <UserProfile 
         appearance={{
-          baseTheme: "dark",
+          baseTheme: undefined, // Let Clerk handle the theme based on system preference
           variables: {
             colorPrimary: "#3b82f6",
             colorText: "white",
