@@ -29,12 +29,8 @@ const OneToOneLayout: React.FC = () => {
     }
   }, [handleResize]);
 
-  // Conditionally render SpeakerLayout if someone is screen sharing
-  if (isSomeoneScreenSharing) {
-    return <SpeakerLayout participantsBarPosition="bottom" />;
-  }
-
   const remoteParticipantViews = useMemo(() => {
+    if (isSomeoneScreenSharing) return null;
     return remoteParticipants.map((participant) => (
       <div key={participant.sessionId} className={isMobile ? "h-1/2 w-full p-2" : "h-full w-full"}>
         <MemoizedParticipantView participant={participant} />
@@ -67,6 +63,10 @@ const OneToOneLayout: React.FC = () => {
       </Draggable>
     );
   }, [localParticipant, isMobile]);
+
+  if (isSomeoneScreenSharing) {
+    return <SpeakerLayout participantsBarPosition="bottom" />;
+  }
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center">

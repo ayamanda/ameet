@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { createSoundDetector, useCallStateHooks, Icon } from '@stream-io/video-react-sdk';
+import { createSoundDetector, useCallStateHooks } from '@stream-io/video-react-sdk';
+import { Mic } from 'lucide-react';
 
 export const AudioVolumeIndicator = () => {
   const { useMicrophoneState } = useCallStateHooks();
@@ -24,7 +25,7 @@ export const AudioVolumeIndicator = () => {
 
   return (
     <div className="flex items-center gap-1">
-      <Icon icon="mic"  />
+      <Mic size={20} className="text-white" />
       <div
         className="h-2 w-12 rounded-full bg-gray-300"
         style={{

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   CallParticipantsList,
   CallingState,
@@ -102,7 +102,6 @@ function useNotificationSounds() {
   }, [call, isSelf]);
 }
 
-
 type CallLayoutType = 'grid' | 'speaker-up' | 'speaker-down' | 'speaker-left' | 'speaker-right' | 'one-one';
 
 const MeetingRoom = () => {
@@ -114,7 +113,12 @@ const MeetingRoom = () => {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
-  const meetingLink = window.location.href;
+  const [meetingLink, setMeetingLink] = useState('');
+
+  useEffect(() => {
+    // This ensures window is defined (runs on client-side only)
+    setMeetingLink(window.location.href);
+  }, []);
 
   const copyLinkToClipboard = () => {
     navigator.clipboard.writeText(meetingLink)
@@ -162,7 +166,22 @@ const MeetingRoom = () => {
     }
   };
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Set initial value
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <section className="relative h-screen w-full overflow-hidden pt-4 text-white bg-slate-950">
