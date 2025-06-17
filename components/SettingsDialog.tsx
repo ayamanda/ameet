@@ -11,6 +11,7 @@ import { Settings } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CallStats } from '@stream-io/video-react-sdk';
+import { cn } from '@/lib/utils';
 
 // Define the type for the layout options
 type CallLayoutType = 'grid' | 'speaker-up' | 'speaker-down' | 'speaker-left' | 'speaker-right' | 'one-one';
@@ -43,47 +44,57 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({ layout, setLayout }) =>
 
   return (
     <Dialog>
-      {/* Trigger button to open the settings dialog */}
       <DialogTrigger asChild>
-        <button className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 transition-colors hover:bg-[#4c535b]">
+        <button className="flex items-center justify-center rounded-xl border border-slate-700/40 bg-slate-900/60 p-3 transition-all duration-300 hover:border-slate-600/40 hover:bg-slate-800/60 hover:shadow-lg hover:shadow-slate-700/25">
           <Settings size={20} className="text-white" />
         </button>
       </DialogTrigger>
-      {/* Dialog content */}
-      <DialogContent className="rounded-lg border bg-slate-900 text-white shadow-lg sm:w-full">
+      <DialogContent className="rounded-xl border border-slate-700/40 bg-slate-900/90 p-6 text-white shadow-xl backdrop-blur-xl sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle className="text-white">Settings</DialogTitle>
-          <DialogDescription className="mb-4 text-slate-400">
-            Customize your meeting experience.
+          <DialogTitle className="text-xl font-semibold text-white">Settings</DialogTitle>
+          <DialogDescription className="mt-2 text-base text-slate-300">
+            Customize your meeting experience
           </DialogDescription>
         </DialogHeader>
-        {/* Tabs container */}
-        <Tabs defaultValue="layout" onValueChange={handleTabChange}>
-          {/* Tabs at the top */}
-          <TabsList className="mb-4 flex justify-center rounded-t-lg bg-slate-800">
-            <TabsTrigger value="layout" className="w-full rounded-tl-lg py-2">
+        <Tabs defaultValue="layout" onValueChange={handleTabChange} className="mt-6">
+          <TabsList className="grid w-full grid-cols-2 rounded-xl bg-slate-800/50 p-1">
+            <TabsTrigger 
+              value="layout" 
+              className={cn(
+                "rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-300",
+                "data-[state=active]:bg-white data-[state=active]:text-slate-900",
+                "data-[state=inactive]:text-slate-300 hover:data-[state=inactive]:bg-slate-700/50"
+              )}
+            >
               Layout
             </TabsTrigger>
-            <TabsTrigger value="call-stats" className="w-full rounded-tr-lg py-2">
+            <TabsTrigger 
+              value="call-stats"
+              className={cn(
+                "rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-300",
+                "data-[state=active]:bg-white data-[state=active]:text-slate-900",
+                "data-[state=inactive]:text-slate-300 hover:data-[state=inactive]:bg-slate-700/50"
+              )}
+            >
               Call Stats
             </TabsTrigger>
           </TabsList>
-          {/* Content area */}
-          <ScrollArea className="h-[500px] rounded-b-lg bg-slate-800 p-4 sm:h-[400px]">
+          <ScrollArea className="mt-6 h-[400px] rounded-xl border border-slate-700/40 bg-slate-800/50 p-6">
             <TabsContent value="layout">
-              <h2 className="mb-4 text-white">Select Layout</h2>
-              <div className="grid grid-cols-3 gap-4 sm:grid-cols-2">
+              <h2 className="mb-6 text-lg font-semibold text-white">Select Layout</h2>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 {layouts.map((option) => (
                   <button
                     key={option.value}
-                    className={`flex flex-col items-center justify-center rounded-lg p-4 text-sm transition-colors sm:text-xs ${
-                      layout === option.value
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-slate-700 text-slate-400 hover:bg-slate-600 hover:text-white'
-                    }`}
                     onClick={() => setLayout(option.value as CallLayoutType)}
+                    className={cn(
+                      "flex flex-col items-center justify-center rounded-xl border p-4 text-sm font-medium transition-all duration-300",
+                      layout === option.value
+                        ? "border-blue-500/50 bg-blue-500/20 text-blue-400 shadow-lg shadow-blue-500/25"
+                        : "border-slate-700/40 bg-slate-800/50 text-slate-300 hover:border-slate-600/40 hover:bg-slate-700/50"
+                    )}
                   >
-                    <span>{option.label}</span>
+                    {option.label}
                   </button>
                 ))}
               </div>

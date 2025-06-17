@@ -142,7 +142,7 @@ const MeetingRoom = () => {
 
         {!isMobile && (
           <>
-            <div className="bg-\[#19232d\]/50 fixed inset-x-0 bottom-0 m-auto flex max-w-[60%] items-center justify-center gap-5 rounded-full p-2 pb-4 shadow-lg backdrop-blur-md">
+            <div className="fixed inset-x-0 bottom-0 m-auto flex max-w-[60%] items-center justify-center gap-5 rounded-full bg-[#19232d] bg-opacity-50 p-2 pb-4 shadow-lg backdrop-blur-md">
       
               {!isMobile &&(<ScreenShareButton />)}
               <RecordingInProgressNotification>
@@ -213,7 +213,7 @@ const MeetingRoom = () => {
                     <DropdownMenuSeparator className="border-dark-1" />
                     <DropdownMenuItem onClick={openWhatsApp}>
                       <div className="flex items-center gap-2">
-                        <img src="/icons/whatsapp.svg" alt="WhatsApp" className="size-4" />
+                        <Image src="/icons/whatsapp.svg" alt="WhatsApp" width={16} height={16} className="size-4" />
                         Share on WhatsApp
                       </div>
                     </DropdownMenuItem>
@@ -306,7 +306,7 @@ const MeetingRoom = () => {
                   <DropdownMenuSeparator className="border-dark-1" />
                   <DropdownMenuItem onClick={openWhatsApp}>
                     <div className="flex items-center gap-2">
-                      <img src="/icons/whatsapp.svg" alt="WhatsApp" className="size-4" />
+                      <Image src="/icons/whatsapp.svg" alt="WhatsApp" width={16} height={16} className="size-4" />
                       Share on WhatsApp
                     </div>
                   </DropdownMenuItem>

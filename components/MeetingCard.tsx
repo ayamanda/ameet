@@ -42,7 +42,7 @@ const MeetingCard = ({
       className="group relative flex min-h-[280px] w-full flex-col justify-between overflow-hidden rounded-2xl border border-white/5 bg-dark-1 p-6 transition-all duration-300 hover:border-white/10 hover:shadow-xl hover:shadow-black/50 xl:max-w-[568px]"
     >
       {/* Subtle gradient background */}
-      <div className="to-white/2 absolute inset-0 bg-gradient-to-br from-white/5 via-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       
       <article className="relative z-10 flex flex-col gap-6">
         <motion.div

@@ -54,6 +54,7 @@ const MeetingSetup: React.FC<MeetingSetupProps> = ({ setIsSetupComplete }) => {
     microphone: 'unknown' as 'granted' | 'denied' | 'unknown' | 'checking'
   });
 
+  const [showParticipants, setShowParticipants] = useState(false);
 
   // Time calculations
   const callTimeNotArrived = callStartsAt && new Date(callStartsAt) > new Date();
@@ -166,9 +167,11 @@ const MeetingSetup: React.FC<MeetingSetupProps> = ({ setIsSetupComplete }) => {
             <div className="size-32 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-1 shadow-2xl">
               <div className="flex size-full items-center justify-center rounded-full bg-slate-900">
                 {connectedUser.image ? (
-                  <img 
+                  <Image 
                     src={connectedUser.image} 
                     alt={connectedUser.name || 'User'} 
+                    width={112}
+                    height={112}
                     className="size-28 rounded-full object-cover"
                   />
                 ) : (
@@ -363,7 +366,7 @@ const MeetingSetup: React.FC<MeetingSetupProps> = ({ setIsSetupComplete }) => {
                   <span className="text-sm font-medium text-slate-300">
                     {participants?.length || 0} waiting
                   </span>
-                  <ParticipantsPreview />
+                  <ParticipantsPreview showParticipants={showParticipants} setShowParticipants={setShowParticipants} />
                 </div>
 
                 {/* Device status - mobile */}

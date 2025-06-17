@@ -11,6 +11,7 @@ import { useGetCallById } from '@/hooks/useGetCallById';
 import MeetingSetup from '@/components/MeetingSetup';
 import MeetingRoom from '@/components/MeetingRoom';
 import Head from 'next/head';
+import LoadingScreen from '@/components/LoadingScreen';
 
 // Enhanced Error State Component matching landing page design
 const ErrorState = ({ 
@@ -140,6 +141,8 @@ const MeetingPage = () => {
   const { call, isCallLoading } = useGetCallById(id);
   const [isSetupComplete, setIsSetupComplete] = useState(false);
   const [isCallEnded, setIsCallEnded] = useState(false);
+  const [isApiCall, setIsApiCall] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -147,6 +150,17 @@ const MeetingPage = () => {
       call.on('call.ended', () => {
         setIsCallEnded(true);
       });
+
+      // Check if this is an API call by looking at the call's custom data
+      const isFromApi = call.state.custom?.isFromApi === true;
+      setIsApiCall(isFromApi);
+
+      // Set connecting to false after a short delay
+      const timer = setTimeout(() => {
+        setIsConnecting(false);
+      }, 3000); // Show loading screen for 3 seconds minimum
+
+      return () => clearTimeout(timer);
     }
   }, [call]);
 
@@ -268,25 +282,31 @@ const MeetingPage = () => {
     );
   }
 
+  // Show loading screen for API calls
+  if (isApiCall && isConnecting && call) {
+    const hostName = call.state.custom?.hostName;
+    return <LoadingScreen userName={hostName} />;
+  }
+
   return (
-    <main className="h-screen w-full">
-      <NextSeo {...meetingMetadata} />
+    <>
       <Head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </Head>
+      <NextSeo {...meetingMetadata} />
       <StreamCall call={call}>
         <StreamTheme>
-          {!isSetupComplete ? (
-            <MeetingSetup setIsSetupComplete={setIsSetupComplete} />
-          ) : (
+          {isSetupComplete ? (
             <MeetingRoom />
+          ) : (
+            <MeetingSetup setIsSetupComplete={setIsSetupComplete} />
           )}
         </StreamTheme>
       </StreamCall>
-    </main>
+    </>
   );
 };
 

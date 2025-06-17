@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Link as LinkIcon, Video, Users, Shield } from 'lucide-react';
+import Loader from '@/components/Loader';
 
 export default function LandingPage() {
   const [meetingLink, setMeetingLink] = useState('');
@@ -23,7 +24,7 @@ export default function LandingPage() {
   if (!isLoaded) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-        <div className="text-lg text-white">Loading...</div>
+        <Loader />
       </div>
     );
   }
