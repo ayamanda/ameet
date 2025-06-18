@@ -1,6 +1,6 @@
 import { ControlButton, BackgroundEffects } from './shared/MeetingRoomControls';
 import { CallLayoutType } from '@/hooks/useMeetingRoom';
-import { Users, Copy, Share, Mail, Check } from 'lucide-react';
+import { Users, Copy, Share, Mail, Check, MessageSquare } from 'lucide-react';
 import {
   CallParticipantsList,
   PaginatedGridLayout,
@@ -30,6 +30,7 @@ import EndCallButton from '../EndCallButton';
 import OneToOneLayout from '../OneToOneLayout';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import { ChatPanel } from './shared/ChatPanel';
 
 interface DesktopMeetingRoomProps {
   layout: CallLayoutType;
@@ -77,6 +78,7 @@ export const DesktopMeetingRoom = ({
 }: DesktopMeetingRoomProps) => {
   const [showControls, setShowControls] = useState(true);
   const [lastActivity, setLastActivity] = useState(Date.now());
+  const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
     const handleActivity = () => {
@@ -132,13 +134,26 @@ export const DesktopMeetingRoom = ({
           </div>
         </div>
         
-        {/* Participants Panel */}
-        <div className={cn(
-          'h-[calc(100vh-86px)] ml-2 transition-all duration-300 ease-in-out',
-          showParticipants ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
-        )}>
-          <div className="h-full rounded-2xl border border-slate-700/40 bg-slate-900/60 backdrop-blur-md">
-            <CallParticipantsList onClose={() => setShowParticipants(false)} />
+        {/* Side Panels Container */}
+        <div className="flex h-[calc(100vh-86px)] ml-2 gap-2">
+          {/* Participants Panel */}
+          <div className={cn(
+            'h-full transition-all duration-300 ease-in-out',
+            showParticipants ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
+          )}>
+            <div className="h-full rounded-2xl border border-slate-700/40 bg-slate-900/60 backdrop-blur-md">
+              <CallParticipantsList onClose={() => setShowParticipants(false)} />
+            </div>
+          </div>
+
+          {/* Chat Panel */}
+          <div className={cn(
+            'h-full transition-all duration-300 ease-in-out',
+            showChat ? 'w-80 opacity-100' : 'w-0 opacity-0 overflow-hidden'
+          )}>
+            <div className="h-full rounded-2xl border border-slate-700/40 bg-slate-900/60 backdrop-blur-md">
+              <ChatPanel />
+            </div>
           </div>
         </div>
       </div>
@@ -176,6 +191,13 @@ export const DesktopMeetingRoom = ({
               active={showParticipants}
             >
               <Users size={20} />
+            </ControlButton>
+
+            <ControlButton
+              onClick={() => setShowChat(!showChat)}
+              active={showChat}
+            >
+              <MessageSquare size={20} />
             </ControlButton>
 
             <SettingsDialog layout={layout} setLayout={setLayout} />

@@ -8,6 +8,7 @@ const STREAM_API_SECRET = process.env.STREAM_SECRET_KEY;
 
 export const tokenProvider = async (guestId?: string) => {
   let userId;
+  let userType = 'user';
 
   const user = await currentUser();
 
@@ -15,11 +16,11 @@ export const tokenProvider = async (guestId?: string) => {
     // User is logged in with Clerk
     userId = user.id;
   } else if (guestId) {
-    // Use provided guest ID
+    // Use provided guest ID and set type as guest
     userId = guestId;
+    userType = 'guest';
   } else {
-    // Generate random guest ID
-    userId = `guest-${Math.random().toString(36).substring(2, 8)}`;
+    throw new Error('No user ID available for token generation');
   }
 
   if (!STREAM_API_KEY) throw new Error('Stream API key is missing');
@@ -30,6 +31,7 @@ export const tokenProvider = async (guestId?: string) => {
   const expirationTime = Math.floor(Date.now() / 1000) + 3600; // 1 hour
   const issuedAt = Math.floor(Date.now() / 1000) - 60;
 
+  // Create token with basic claims
   const token = streamClient.createToken(userId, expirationTime, issuedAt);
 
   return token;

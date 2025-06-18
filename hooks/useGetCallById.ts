@@ -19,7 +19,7 @@ export const useGetCallById = (id: string | string[]) => {
 
         setIsCallLoading(false);
       } catch (error) {
-        console.error(error);
+        console.error('Error loading call:', error);
         setIsCallLoading(false);
       }
     };

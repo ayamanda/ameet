@@ -1,6 +1,6 @@
 import { BackgroundEffects } from './shared/MeetingRoomControls';
 import { CallLayoutType } from '@/hooks/useMeetingRoom';
-import { Users, Copy, Mail, Check, X, Menu, Maximize2, Minimize2, FlipHorizontal } from 'lucide-react';
+import { Users, Copy, Mail, Check, X, Menu, Maximize2, Minimize2, FlipHorizontal, MessageSquare } from 'lucide-react';
 import {
   CallParticipantsList,
   PaginatedGridLayout,
@@ -9,8 +9,6 @@ import {
   ToggleAudioPublishingButton,
   ToggleVideoPublishingButton,
   ReactionsButton,
-  RecordingInProgressNotification,
-  RecordCallConfirmationButton,
   PermissionRequests,
   useCallStateHooks,
 } from '@stream-io/video-react-sdk';
@@ -29,6 +27,7 @@ import {
 } from '../ui/drawer';
 import { useEffect, useState } from 'react';
 import { toast } from '../ui/use-toast';
+import { ChatPanel } from './shared/ChatPanel';
 
 interface MobileMeetingRoomProps {
   layout: CallLayoutType;
@@ -78,6 +77,7 @@ export const MobileMeetingRoom = ({
   const [showControls, setShowControls] = useState(true);
   const [lastActivity, setLastActivity] = useState(Date.now());
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const { useCameraState } = useCallStateHooks();
   const { camera, devices } = useCameraState();
   const [isFlippingCamera, setIsFlippingCamera] = useState(false);
@@ -210,28 +210,69 @@ export const MobileMeetingRoom = ({
 
       {/* Main Video Area */}
       <div className="relative flex size-full items-center justify-center">
-        <div className="flex size-full max-w-[1000px] items-center">
-          <CallLayout layout={layout} />
+        <CallLayout layout={layout} />
+      </div>
+
+      {/* Bottom Controls */}
+      <div className={cn(
+        "fixed bottom-4 left-4 right-4 z-30 transition-all duration-300",
+        showControls ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
+      )}>
+        <div className="flex items-center justify-center gap-2 rounded-2xl border border-slate-700/40 bg-slate-900/60 p-3 shadow-2xl backdrop-blur-md">
+          <SpeakingWhileMutedNotification>
+            <ToggleAudioPublishingButton />
+          </SpeakingWhileMutedNotification>
+          
+          <ToggleVideoPublishingButton />
+          
+          <ReactionsButton />
+
+          <button
+            onClick={() => setShowParticipants(true)}
+            className={cn(
+              "flex size-10 items-center justify-center rounded-lg transition-colors",
+              showParticipants ? "bg-white/20" : "hover:bg-white/10"
+            )}
+          >
+            <Users size={20} className="text-white" />
+          </button>
+
+          <button
+            onClick={() => setShowChat(true)}
+            className={cn(
+              "flex size-10 items-center justify-center rounded-lg transition-colors",
+              showChat ? "bg-white/20" : "hover:bg-white/10"
+            )}
+          >
+            <MessageSquare size={20} className="text-white" />
+          </button>
+
+          <EndCallButton />
         </div>
       </div>
 
-      {/* Participants Panel - Mobile Drawer */}
+      {/* Participants Sheet */}
       <Sheet open={showParticipants} onOpenChange={setShowParticipants}>
-        <SheetContent side="right" className="w-full border-l border-slate-700/40 bg-slate-900/95 p-0 backdrop-blur-lg sm:max-w-md">
+        <SheetContent side="right" className="w-full border-l border-slate-700/40 bg-slate-900/95 p-0 backdrop-blur-xl">
+          <CallParticipantsList onClose={() => setShowParticipants(false)} />
+        </SheetContent>
+      </Sheet>
+
+      {/* Chat Sheet */}
+      <Sheet open={showChat} onOpenChange={setShowChat}>
+        <SheetContent side="right" className="w-full border-l border-slate-700/40 bg-slate-900/95 p-0 backdrop-blur-xl">
           <div className="flex h-full flex-col">
-            <div className="border-b border-slate-700/40 p-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-white">Participants</h2>
-                <button
-                  onClick={() => setShowParticipants(false)}
-                  className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-800 hover:text-white"
-                >
-                  <X size={20} />
-                </button>
-              </div>
+            <div className="flex items-center justify-between border-b border-slate-700/40 px-4 py-3">
+              <h2 className="text-lg font-semibold text-white">Chat</h2>
+              <button
+                onClick={() => setShowChat(false)}
+                className="rounded-lg p-2 hover:bg-white/10"
+              >
+                <X size={20} className="text-white" />
+              </button>
             </div>
-            <div className="flex-1 overflow-y-auto p-4">
-              <CallParticipantsList onClose={() => setShowParticipants(false)} />
+            <div className="flex-1 overflow-hidden">
+              <ChatPanel />
             </div>
           </div>
         </SheetContent>
@@ -317,26 +358,6 @@ export const MobileMeetingRoom = ({
           </div>
         </DrawerContent>
       </Drawer>
-
-      {/* Bottom Controls */}
-      <div className={cn(
-        "fixed bottom-6 left-4 right-4 z-30 transition-all duration-300",
-        showControls ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
-      )}>
-        <div className="flex items-center justify-center gap-4 rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4 backdrop-blur-md">
-          <SpeakingWhileMutedNotification>
-            <ToggleAudioPublishingButton />
-          </SpeakingWhileMutedNotification>
-          
-          <ToggleVideoPublishingButton />
-          
-          <RecordingInProgressNotification>
-            <RecordCallConfirmationButton />
-          </RecordingInProgressNotification>
-          
-          <EndCallButton />
-        </div>
-      </div>
     </section>
   );
 };

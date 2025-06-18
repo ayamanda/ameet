@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useCall } from '@stream-io/video-react-sdk';
 
 const audioCache = new Map<string, () => Promise<void>>();
@@ -33,6 +33,37 @@ async function playSoundFromUrl(url: string) {
 }
 
 export function useNotificationSounds() {
+  const [isSoundEnabled, setIsSoundEnabled] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('chat-sound-enabled');
+      return stored === null ? true : stored === 'true';
+    }
+    return true;
+  });
+
+  const [audio] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return new Audio('/sounds/joined.mp3');
+    }
+    return null;
+  });
+
+  const playMessageSound = useCallback(() => {
+    if (audio && isSoundEnabled) {
+      audio.currentTime = 0;
+      audio.play().catch(console.error);
+    }
+  }, [audio, isSoundEnabled]);
+
+  const toggleSound = useCallback(() => {
+    setIsSoundEnabled(prev => !prev);
+  }, []);
+
+  // Persist sound preference
+  useEffect(() => {
+    localStorage.setItem('chat-sound-enabled', isSoundEnabled.toString());
+  }, [isSoundEnabled]);
+
   const call = useCall();
 
   const isSelf = useCallback(
@@ -63,4 +94,10 @@ export function useNotificationSounds() {
       unlistenLeft();
     };
   }, [call, isSelf]);
+
+  return {
+    isSoundEnabled,
+    toggleSound,
+    playMessageSound
+  };
 }
